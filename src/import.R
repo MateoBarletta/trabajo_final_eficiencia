@@ -5,7 +5,7 @@ library(janitor)
 library(writexl)
 
 
-path <- here::here("trabajo_final", "data", "eaae")
+path <- here::here("data", "eaae")
 
 col1 <- c("seccion",	"division", "descripcion", "VBP", "CI", "VAB", "REM", "IMP","CKF", "EEN")
 col2 <- c("seccion",	"division", "descripcion", "VBP", "CI", "IMP", "CKF", "VAB","REM", "EEN")
@@ -65,7 +65,7 @@ df_eaae %>%
   select("vbp", "ci", "imp", "ckf", "vab","rem", "een") %>% 
   cor()
 
-#write_xlsx(df_eaae, "trabajo_final/data/eaae.xlsx")
+# write_xlsx(df_eaae, "data/eaae.xlsx")
 
 
 rm(df_2008, df_2009, df_2010, df_2011, df_2012, df_2013, df_2014, df_2015, df_2016)
