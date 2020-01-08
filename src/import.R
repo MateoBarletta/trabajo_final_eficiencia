@@ -1,15 +1,20 @@
+#### IMPORTACION DE ARCHIVOS DE EAAE ####
+
+# CARGA LIBRERIAS
 library(tidyverse)
 library(here)
 library(readxl)
 library(janitor)
 library(writexl)
 
-
+# PATH IMPORTACION ARCHIVOS
 path <- here::here("data", "eaae")
 
+# NOMBRES COLUMNAS
 col1 <- c("seccion",	"division", "descripcion", "VBP", "CI", "VAB", "REM", "IMP","CKF", "EEN")
 col2 <- c("seccion",	"division", "descripcion", "VBP", "CI", "IMP", "CKF", "VAB","REM", "EEN")
 
+# IMPORTA DFs por año
 df_2016 <- read_excel(file.path(path, "EAE_C2.5_2016.xls"),
                       skip = 11, col_names = col1) %>% 
   filter(!is.na(VBP)) %>% 
@@ -55,19 +60,16 @@ df_2008 <- read_excel(file.path(path, "EAE_C2_2008.xls"),
   filter(!is.na(VBP)) %>% 
   mutate(anio = '2008')
 
-
+# CREA DF UNICO
 df_eaae <- bind_rows(df_2008, df_2009, df_2010, df_2011, df_2012, df_2013, df_2014, df_2015, df_2016) %>% 
   clean_names() %>% 
   filter(seccion == "C") %>% 
   select(anio, seccion, division, descripcion, vbp, vab, ci, rem, ckf, everything())
 
-df_eaae %>% 
-  select("vbp", "ci", "imp", "ckf", "vab","rem", "een") %>% 
-  cor()
-
+## SALVA EXCEL
 # write_xlsx(df_eaae, "data/eaae.xlsx")
 
-
+# LIMPIEZA DE ARCHIVOS AUXILIARES
 rm(df_2008, df_2009, df_2010, df_2011, df_2012, df_2013, df_2014, df_2015, df_2016)
 rm(path, col1, col2)
   
