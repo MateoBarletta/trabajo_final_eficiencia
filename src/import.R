@@ -66,7 +66,7 @@ df_eaae <- bind_rows(df_2008, df_2009, df_2010, df_2011, df_2012, df_2013, df_20
   filter(seccion == "C") %>% 
   select(anio, seccion, division, descripcion, vbp, vab, ci, rem, ckf, everything())
 
-## SALVA EXCEL
+# SALVA EXCEL
 # write_xlsx(df_eaae, "data/eaae.xlsx")
 
 # LIMPIEZA DE ARCHIVOS AUXILIARES

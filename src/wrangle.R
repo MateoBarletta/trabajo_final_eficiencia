@@ -1,8 +1,12 @@
-library(readxl)
+#### DEFLACTACION ####
+
+# CARGO LIBRERIAS
 library(dplyr)
+library(here)
+library(readxl)
 
 # CARGO DF
-df_eaae <- read_excel("data/eaae.xlsx") %>% 
+df_eaae <- read_excel(here::here("data/eaae.xlsx")) %>% 
   mutate(anio = as.character(anio))
 
 # Correlaciones
@@ -25,7 +29,7 @@ df_eaae %>%
 deflactores <- read_excel("data/deflactores.xlsx") %>% 
   mutate(anio = as.character(anio))
 
-# DEFLACTO
+# DEFLACTACION
 df_deflactado <- df_eaae %>% 
   left_join(deflactores, by = 'anio') %>% 
   transmute(anio,
@@ -36,3 +40,6 @@ df_deflactado <- df_eaae %>%
             ci = 100 * ci / ipi_vbp,
             k  = 100 * ckf / ipi_fbkf,
             rem_d = 100 * rem / ims)
+
+# SALVA EXCEL
+# write_xlsx(df_deflactado, "data/df_deflactado.xlsx")1
