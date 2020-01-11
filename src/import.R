@@ -56,14 +56,10 @@ df_2008 <- read_excel(file.path(path, "EAE_C2_2008.xls"),
   mutate(anio = '2008')
 
 
-df_eaae <- bind_rows(df_2008, df_2009, df_2010, df_2011, df_2012, df_2013, df_2014, df_2015, df_2016) %>% 
+df_eaae <- bind_rows(df_2012, df_2013, df_2014, df_2015, df_2016) %>% 
   clean_names() %>% 
   filter(seccion == "C") %>% 
   select(anio, seccion, division, descripcion, vbp, vab, ci, rem, ckf, everything())
-
-df_eaae %>% 
-  select("vbp", "ci", "imp", "ckf", "vab","rem", "een") %>% 
-  cor()
 
 # write_xlsx(df_eaae, "data/eaae.xlsx")
 
