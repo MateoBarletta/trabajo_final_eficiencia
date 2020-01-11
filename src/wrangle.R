@@ -1,5 +1,3 @@
-#### DEFLACTACION ####
-
 # CARGO LIBRERIAS
 library(dplyr)
 library(here)
@@ -7,7 +5,7 @@ library(readxl)
 library(writexl)
 
 # CARGO DF
-df_eaae <- read_excel(here::here("data/eaae.xlsx")) %>% 
+eaae <- read_excel(here::here("data/eaae.xlsx")) %>% 
   mutate(anio = as.character(anio))
 
 # Agrupo division 29
@@ -33,6 +31,8 @@ df_eaae <- eaae %>%
   bind_rows(division_agregar) %>% 
   arrange(anio, division)
 
+rm(eaae, division_agregar, division_quitar)
+
 # Tabla divisiones
 divisiones <- df_eaae %>% 
   select(division, descripcion) %>% 
@@ -54,7 +54,7 @@ row.names(matriz_correlaciones) <- c("vbp", "ci", "ckf", "rem")
 
 
 
-## Deflactacion
+#### DEFLACTACION ####
 # Las variables se encuentran en valores corrientes por lo que es necesario deflactarlas.
 # Para eso usaremos distintos índices de precios:
 # 
@@ -79,7 +79,13 @@ df_deflactado <- df_eaae %>%
             y  = 100 * vbp / ipi_vbp, 
             ci = 100 * ci / ipi_vbp,
             k  = 100 * ckf / ipi_fbkf,
-            rem_d = 100 * rem / ims)
-
+            l  = 100 * rem / ims)
 # SALVA EXCEL
-# write_xlsx(df_deflactado, "data/df_deflactado.xlsx")
+# write_xlsx(df_deflactado, "data/df_deflactado.xlsx") 
+
+# DF CON INPUTS
+df <- df_deflactado %>% 
+  rowwise() %>% 
+  mutate(x  = sum(ci, k, l))
+
+
