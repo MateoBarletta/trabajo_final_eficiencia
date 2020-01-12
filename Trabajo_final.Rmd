@@ -1,5 +1,5 @@
 ---
-title: "Análisis de la productividad del sector industrial en Uruguay"
+title: "Análisis de la productividad industrial en Uruguay"
 subtitle: "Métodos para la Medición de la Eficiencia y la Productividad"
 subsubtitle: "Maestría en Economía - UDELAR"
 author: "Mateo Barletta - Eugenia Leira"
@@ -41,6 +41,7 @@ Existen dos caminos para el cálculo de la productividad. Una primera alternativ
 
 Abordaremos la medición de la productividad mediante otro tipo de metodología, este es un enfoque  semi-paramétrico y que utiliza métodos de frontera. 
 
+
 # Antecedentes
 
 # Datos y selección de variables
@@ -53,14 +54,44 @@ La EAAE se desagrega a nivel de CIIU, lo que permite realizar el análisis para 
 
 Para obtener una base de datos que nos permita efectuar el estudio se deberá depurar la base para quitar outliers y deflactar las variables por un índice de precios agregado para obtener valores constantes de las mismas. Adicionalmente, dentro de los principales desafíos de este trabajo es conseguir obtener buenas aproximaciones del Capital que es un dato engorroso que no está debidamente calculado.
 
-En particular, se utilizará como variable output el valor bruto de producción (VBP) ya que esta variable refleja correctamente el valor producido y es menos volátil que el valor agregado bruto (VAB); mientras que como inputs se utilizarán las remuneraciones (REM), el consumo de capital fijo (CKF) y el consumo intermedio (CI), ya que son los insumos clásicos de cualquier función de producción utilizados en la literatura.
+En particular, se utilizará como variable output el valor bruto de producción (VBP) ya que esta variable refleja correctamente el valor producido y es menos volátil que el valor agregado bruto (VAB); mientras que como inputs se utilizarán las remuneraciones (REM), el consumo de capital fijo (CKF) y el consumo intermedio (CI), ya que son los insumos clásicos de cualquier función de producción utilizados en la literatura. Con estas variables se intenta aproximar al *Producto*, *Capital*, *Trabajo* y *Consumo intermedio* respectivamente.
 
 Como se puede ver en la siguiente tabla, todas las variables se encuentran ampliamente correlacionadas:
 
 ```{r}
 matriz_correlaciones %>% 
-  kable(booktabs = T, caption = "Matriz de correlacion de Output e Inputs") %>% 
+  kable(booktabs = T, caption = "Matriz de correlaciones de Output e Inputs") %>% 
   kable_styling(latex_options =c("HOLD_position", "striped"))
+```
+
+Las variables se encuentran en valores corrientes. Para una mejor aproximación de la función de producción es deseable trabajar a niveles constantes, ya que de esta manera se aislan los efectos de los precios y se aproxima mejor el valor unitario de los insumos y el producto. Por esta razón se decide utilizar un deflactor específico para cada variable, como se detalla a continuación:
+
++ **Producto:** Índice de precios implícitos de la producción, calculado por el BCU.
++ **Capital:** Índice de precios implícitos de la formación bruta de capital, calculado por el BCU.
++ **Trabajo:** Índice medio de salarios, calculado por el INE.
++ **Consumo intermedio:** Índice de precios implícitos de la producción, calculado por el BCU.
+
+Para simplificar la deflactación se utilizan los índices agregados para toda la industria. El deflactar el producto y el consumo intermedio por el mismo índice de precios conlleva el supuesto implícito de que la evolución de precios del producto y de las materias primas es la misma.
+
+Una vez realizada la deflactación, se cuenta con las variables en valores constantes. Como se muestra en el *Gráfico 1*, las variables en niveles tienen una alta dispersión, por lo que se aplicará la transformación logarítmica para el tratamiento.
+
+```{r}
+grafico_scatter_niveles
+```
+
+
+Como la metodología a emplear es muy sensible a la presencia de *outliers*, también se decide quitar a las de mayory menor VBP. Las divisiones quitadas son las siguientes:
+
+```{r}
+divisiones_quitar %>% 
+  kable(booktabs = T, caption = "Divisiones no incluídas en el análisis") %>% 
+  kable_styling(latex_options =c("HOLD_position", "striped"))
+```
+
+En el *Gráfico 2* podemos observar como queda la relación entre Inputs y Outputs una vez quitados los outliers y transformadas las variables a logaritmos.
+
+```{r}
+grafico_scatter_logs
 ```
 
 
