@@ -6,7 +6,7 @@ library(ggthemes)
 # Cargo df
 df_deflactado <- read_excel(here::here("data/df_deflactado.xlsx")) 
 
-# DF CON INPUTS
+# Df con inputs en logs
 df_log <- df_deflactado %>% 
   rowwise() %>% 
   mutate(y  = log(y),

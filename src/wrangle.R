@@ -59,10 +59,11 @@ df_deflactado <- df_eaae %>%
             division,
             seccion,
             descripcion,
-            y  = 100 * vbp / ipi_vbp, 
-            ci = 100 * ci / ipi_vbp,
+            y  = 100 * vbp / ipi_vbp,
             k  = 100 * ckf / ipi_fbkf,
-            l  = 100 * rem / ims)
+            l  = 100 * rem / ims, 
+            ci = 100 * ci / ipi_vbp,
+            x  = k + l + ci)
 
 # SALVA EXCEL
 # write_xlsx(df_deflactado, "data/df_deflactado.xlsx") 

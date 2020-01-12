@@ -2,3 +2,12 @@
 .Rhistory
 .RData
 .Ruserdata
+.gitignore
+*.log
+*.xlsx
+*.xls
+*.rds
+*.pdf
+/data
+
+
