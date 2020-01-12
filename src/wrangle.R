@@ -33,24 +33,7 @@ df_eaae <- eaae %>%
 
 rm(eaae, division_agregar, division_quitar)
 
-# Tabla divisiones
-divisiones <- df_eaae %>% 
-  select(division, descripcion) %>% 
-  distinct()
-
-# write_xlsx(divisiones, "data/tablas/divisiones.xlsx")
-
-
-# Tabla correlaciones
-matriz_correlaciones <- df_eaae %>% 
-  select("vbp", "ci", "ckf", "rem") %>% 
-  cor() %>% 
-  as_data_frame() 
-
-row.names(matriz_correlaciones) <- c("vbp", "ci", "ckf", "rem")
-
-# write_xlsx(matriz_correlaciones, "data/tablas/matriz_correlaciones.xlsx")
-
+# saveRDS(df_eaae, "data/df_eaae.rds")
 
 
 
@@ -80,12 +63,7 @@ df_deflactado <- df_eaae %>%
             ci = 100 * ci / ipi_vbp,
             k  = 100 * ckf / ipi_fbkf,
             l  = 100 * rem / ims)
+
 # SALVA EXCEL
 # write_xlsx(df_deflactado, "data/df_deflactado.xlsx") 
-
-# DF CON INPUTS
-df <- df_deflactado %>% 
-  rowwise() %>% 
-  mutate(x  = sum(ci, k, l))
-
 
