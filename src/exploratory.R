@@ -1,4 +1,7 @@
 library(tidyverse)
+library(here)
+library(readxl)
+library(ggthemes)
 
 # Cargo df
 df_deflactado <- read_excel(here::here("data/df_deflactado.xlsx")) 
@@ -15,5 +18,9 @@ df_log <- df_deflactado %>%
 
 # Grafico
 df_log %>% 
-  ggplot(aes(x=ci, y=y, color=division)) +
-  geom_point()
+  ggplot(aes(x=x, y=y, color=division)) +
+  geom_point() +
+  labs(y="Log del VBP", x='Log de los Inputs') + 
+  ggtitle('Scatterplot de Output e Inputs según división') +
+  theme_bw()
+
