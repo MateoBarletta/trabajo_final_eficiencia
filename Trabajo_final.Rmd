@@ -1,0 +1,83 @@
+---
+title: "Análisis de la productividad del sector industrial en Uruguay"
+subtitle: "Métodos para la Medición de la Eficiencia y la Productividad"
+subsubtitle: "Maestría en Economía - UDELAR"
+author: "Mateo Barletta - Eugenia Leira"
+date: "15/1/2020"
+output: pdf_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+options(knitr.table.format = "latex")
+options(scipen=999, "digits"=4)
+
+library(knitr)
+library(kableExtra)
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggthemes)
+library(here)
+library(readxl)
+library(Benchmarking)
+
+source('src/tablas_auxiliar.R')
+```
+
+# Introducción
+
+En este trabajo nos proponemos realizar una primera aproximación a la productividad del sector industrial de Uruguay a partir de los datos de la Encuesta Anual de Actividad Económica (EAAE) realizada por el Instituto de Estadística del Uruguay (INE). En particular este estudio permitirá identificar cuáles sectores industriales mostraron un mejor comportamiento productivo.  
+
+La productividad total de los factores es un tema con escasa investigación en la agenda de Uruguay pero que ocupa un rol central en la agenda de crecimiento. La poca disponibilidad de datos, así como el alto rezago en la publicación de los mismos hace de esta temática un tema poco abordado por la academia nacional. Adicionalmente la gran mayoría de los trabajos existentes se basan en técnicas de contabilidad del crecimiento.  
+
+El sector industrial representa un interesante objeto de estudio por la heterogeneidad que lo compone. La metodología nos permite realizar distintas agrupaciones, por código CIIU, por tamaño de empresa entre otras. Los datos se publican para 22 divisiones distintas lo que da versatilidad. Debido a la disponibilidad de datos el sector industrial es el más estudiado en los trabajos de productividad, por lo que existe una literatura de referencia.  
+
+Para llevar a cabo el estudio se aplicará la metodología del Índice de Malmquist para el sector industrial uruguayo. Así como también se descompondrá la variación del índice en ganancia de eficiencia (SEC) y cambio tecnológico puro (PTEC).  
+
+Existen dos caminos para el cálculo de la productividad. Una primera alternativa y la más utilizada es utilizar las técnicas de contabilidad de crecimiento. Estas técnicas permiten descomponer el crecimiento del producto según el crecimiento de los inputs y así obtener el residuo de Solow - en honor al investigador Robert Solow - también interpretado como cambio tecnológico o cambios en la productividad. Este método ampliamente utilizado en las últimas décadas (el trabajo pionero de Solow es de 1957) necesita asumir una función de producción del tipo paramétrico por lo que es necesario conocer los valores fijos de los parámetros.  
+
+Abordaremos la medición de la productividad mediante otro tipo de metodología, este es un enfoque  semi-paramétrico y que utiliza métodos de frontera. 
+
+# Antecedentes
+
+# Datos y selección de variables
+
+Los datos utilizados en este trabajo son extraídos de la encuesta anual de actividad económica (EAAE) realizada por el Instituto Nacional de Estadística de Uruguay (INE) [^1]. Se cuenta con información entre 2008 y 2016, aunque a los efectos de este análisis se utilizarán aquellos a partir del 2012 debido a que se observan algunos inconvenientes en la base de datos en el año 2011. 
+
+[^1]: [http://www.ine.gub.uy/web/guest/industria-comercio-y-servicios](http://www.ine.gub.uy/web/guest/industria-comercio-y-servicios)
+
+La EAAE se desagrega a nivel de CIIU, lo que permite realizar el análisis para los diferentes rubros de la actividad industrial, así como tamaño, …. Por otro lado, los datos se publican para 22 divisiones distintas lo que da versatilidad.  En el Anexo se incluye una descripción de todas las divisiones consideradas.
+
+Para obtener una base de datos que nos permita efectuar el estudio se deberá depurar la base para quitar outliers y deflactar las variables por un índice de precios agregado para obtener valores constantes de las mismas. Adicionalmente, dentro de los principales desafíos de este trabajo es conseguir obtener buenas aproximaciones del Capital que es un dato engorroso que no está debidamente calculado.
+
+En particular, se utilizará como variable output el valor bruto de producción (VBP) ya que esta variable refleja correctamente el valor producido y es menos volátil que el valor agregado bruto (VAB); mientras que como inputs se utilizarán las remuneraciones (REM), el consumo de capital fijo (CKF) y el consumo intermedio (CI), ya que son los insumos clásicos de cualquier función de producción utilizados en la literatura.
+
+Como se puede ver en la siguiente tabla, todas las variables se encuentran ampliamente correlacionadas:
+
+```{r}
+matriz_correlaciones %>% 
+  kable(booktabs = T, caption = "Matriz de correlacion de Output e Inputs") %>% 
+  kable_styling(latex_options =c("HOLD_position", "striped"))
+```
+
+
+
+# Metodología
+
+# Resultados
+
+# Conclusiones
+
+# Anexo
+
+```{r}
+divisiones %>% 
+  kable(booktabs = T, caption = "Divisiones incluídas en el análisis") %>% 
+  kable_styling(latex_options =c("HOLD_position", "striped", "scale_down"))
+```
+
+
+
