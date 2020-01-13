@@ -1,12 +1,12 @@
 ---
 title: "Análisis de la productividad industrial en Uruguay"
 subtitle: "Métodos para la Medición de la Eficiencia y la Productividad"
-subsubtitle: "Maestría en Economía - UDELAR"
 author: "Mateo Barletta - Eugenia Leira"
 date: "15/1/2020"
 output: pdf_document
 urlcolor: blue
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
@@ -26,6 +26,7 @@ library(Benchmarking)
 
 source('src/tablas_auxiliar.R')
 ```
+
 
 # Introducción
 
@@ -76,7 +77,12 @@ Para simplificar la deflactación se utilizan los índices agregados para toda l
 Una vez realizada la deflactación, se cuenta con las variables en valores constantes. Como se muestra en el *Gráfico 1*, las variables en niveles tienen una alta dispersión, por lo que se aplicará la transformación logarítmica para el tratamiento.
 
 ```{r}
-grafico_scatter_niveles
+df_deflactado %>% 
+  ggplot(aes(x=x, y=y, color=division)) +
+  geom_point() +
+  labs(y="VBP", x='Suma de los Inputs') + 
+  ggtitle('Scatterplot de Output e Inputs según división, en niveles') +
+  theme_bw()
 ```
 
 
@@ -91,7 +97,12 @@ divisiones_quitar %>%
 En el *Gráfico 2* podemos observar como queda la relación entre Inputs y Outputs una vez quitados los outliers y transformadas las variables a logaritmos.
 
 ```{r}
-grafico_scatter_logs
+df_log %>% 
+  ggplot(aes(x=x, y=y, color=division)) +
+  geom_point() +
+  labs(y="Log del VBP", x='Log de los Inputs') + 
+  ggtitle('Scatterplot de Output e Inputs según división, en logaritmos') +
+  theme_bw()
 ```
 
 
