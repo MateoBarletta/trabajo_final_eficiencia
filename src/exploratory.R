@@ -6,6 +6,10 @@ library(ggthemes)
 # Cargo df
 df_deflactado <- read_excel(here::here("data/df_deflactado.xlsx")) 
 
+# Df con divisiones filtradas
+df_filtrado <- df_deflactado %>% 
+  filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12')) 
+
 # Df con inputs en logs
 df_log <- df_deflactado %>% 
   rowwise() %>% 
@@ -24,6 +28,5 @@ df_log %>%
   ggtitle('Scatterplot de Output e Inputs según división') +
   theme_bw()
 
-df2 <- df_deflactado %>% 
-  filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12')) 
+
 
