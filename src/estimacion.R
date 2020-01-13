@@ -3,10 +3,6 @@ library(Benchmarking)
 
 # Cargo df
 df <- df_log
-df <- df_deflactado %>% 
-  filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12')) 
-
-
 
 #### ESTIMACION ####
 # Output
@@ -16,32 +12,31 @@ y <- cbind(df$y)
 x <- cbind(df$k, df$l, df$ci)
 xx <- cbind(df$x)
 
+
 # Año 2012 (base) 
-y0 <- matrix(c(y[1:16,1]),ncol=1)
-x0 <- matrix(c(x[1:16,1:3]),ncol=3)
-x_0 <-matrix(c(xx[1:16,1]),ncol=1) 
+y0  <- matrix(c(y[1:16,1]),ncol=1)
+x0  <- matrix(c(x[1:16,1:3]),ncol=3)
+x_0 <- matrix(c(xx[1:14,1]),ncol=1) 
 
 # Año 2013
-y1 <- matrix(c(y[17:32,1]),ncol=1)
-x1 <- matrix(c(x[17:32,1:3]),ncol=3)
-x_1 <-matrix(c(xx[17:32,1]),ncol=1) 
+y1  <- matrix(c(y[17:32,1]),ncol=1)
+x1  <- matrix(c(x[17:32,1:3]),ncol=3)
+x_1 <- matrix(c(xx[15:28,1]),ncol=1) 
 
 # Año 2014
-y2 <- matrix(c(y[33:48,1]),ncol=1)
-x2 <- matrix(c(x[33:48,1:3]),ncol=3)
-x_2 <- matrix(c(xx[33:48,1]),ncol=1)
+y2  <- matrix(c(y[33:48,1]),ncol=1)
+x2  <- matrix(c(x[33:48,1:3]),ncol=3)
+x_2 <- matrix(c(xx[29:42,1]),ncol=1)
 
 # Año 2015
-y3 <- matrix(c(y[49:64,1]),ncol=1)
-x3 <- matrix(c(x[49:64,1:3]),ncol=3)
-x_3 <- matrix(c(xx[49:64,1]),ncol=1)
+y3  <- matrix(c(y[49:64,1]),ncol=1)
+x3  <- matrix(c(x[49:64,1:3]),ncol=3)
+x_3 <- matrix(c(xx[43:56,1]),ncol=1)
 
 # Año 2016
-y4 <- matrix(c(y[65:80,1]),ncol=1)
-x4 <- matrix(c(x[65:80,1:3]),ncol=3)
-x_4 <- matrix(c(xx[65:80,1]),ncol=1)
-
-
+y4  <- matrix(c(y[65:80,1]),ncol=1)
+x4  <- matrix(c(x[65:80,1:3]),ncol=3)
+x_4 <- matrix(c(xx[57:70,1]),ncol=1)
 
 
 # Estimo SFA contemporaneos
@@ -60,10 +55,10 @@ msfa01 <- sfa(x0,y1)
 msfa01
 
 #Productividad y descomposicion
-tc1 <- exp(msfa01$coef[1])
-tec1 <- teBC.sfa(msfa1)/teBC.sfa(msfa0)
+tc01 <- exp(msfa01$coef[1])
+tec01 <- teBC.sfa(msfa1)/teBC.sfa(msfa0)
 
-tfpc1 <- tc1*tec1
+tfpc01 <- tc01*tec01
 
 
 
