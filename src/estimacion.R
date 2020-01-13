@@ -3,6 +3,7 @@ library(Benchmarking)
 
 # Cargo df
 df <- df_log
+df <- df2
 
 #### ESTIMACION ####
 # Output
@@ -39,12 +40,37 @@ x4  <- matrix(c(x[65:80,1:3]),ncol=3)
 x_4 <- matrix(c(xx[57:70,1]),ncol=1)
 
 
-# Estimo SFA contemporaneos
-msfa0 <- sfa(x0,y0)
-msfa1 <- sfa(x1,y1)
-msfa2 <- sfa(x2,y2)
-msfa3 <- sfa(x3,y3)
-msfa4 <- sfa(x4,y4)
+# Estimate 4 distance functions
+d00 <- dea(x0, y0, RTS="crs", ORIENTATION="out")
+d01 <- dea(x1, y1, RTS="crs", XREF=x0, YREF=y0, ORIENTATION="out") 
+d10 <- dea(x0, y0, RTS="crs", XREF=x1, YREF=y1, ORIENTATION="out") 
+d11 <- dea(x1, y1, RTS="crs", ORIENTATION="out")
+
+teff <- cbind(d00$eff, d01$eff, d10$eff, d11$eff) 
+colnames(teff) <- c("d00", "d10", "d01","d11")
+
+# shepard's distance functions
+eff00 <- cbind(1/d00$eff)
+eff10 <- cbind(1/d10$eff)
+eff01 <- cbind(1/d01$eff)
+eff11 <- cbind(1/d11$eff)
+
+eff <- cbind(eff00,eff10,eff01,eff11)
+colnames(eff) <- c("eff00", "eff10", "eff01","eff11")
+
+# Malquist productivity index (tfpc)
+# El indice de malmquist se aplica con funciones de distancia de shepard (invertir las de farrell)
+tfpc <- cbind((eff01/eff00 * eff11/eff10) ^ 0.5)
+
+ 
+
+
+# # Estimo SFA contemporaneos
+# msfa0 <- sfa(x0,y0)
+# msfa1 <- sfa(x1,y1)
+# msfa2 <- sfa(x2,y2)
+# msfa3 <- sfa(x3,y3)
+# msfa4 <- sfa(x4,y4)
 
 
 # Estimo SFA para x0 y x1
@@ -79,4 +105,13 @@ points(x_4, y4, col="blue", pch=16)
 # text(x_2, y2, 1:dim(x1)[1], col="green", adj=-1)
 # text(x_3, y3, 1:dim(x1)[1], col="yellow", adj=-1)
 text(x_4, y4, 1:dim(x1)[1], col="blue", adj=-1)
+
+
+
+
+
+
+
+
+
 

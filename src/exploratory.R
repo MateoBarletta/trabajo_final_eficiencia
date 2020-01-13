@@ -24,3 +24,6 @@ df_log %>%
   ggtitle('Scatterplot de Output e Inputs según división') +
   theme_bw()
 
+df2 <- df_deflactado %>% 
+  filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12')) 
+

@@ -54,3 +54,11 @@ df_log <- df_deflactado %>%
 #   labs(y="Log del VBP", x='Log de los Inputs') + 
 #   ggtitle('Scatterplot de Output e Inputs según división') +
 #   theme_bw()
+
+df_log %>% 
+  select(y, k , l, ci , x) %>% 
+  summary()
+
+modelo <- lm(y ~ k + l + ci, data=df_log)
+
+
