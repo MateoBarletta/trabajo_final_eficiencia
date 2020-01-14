@@ -65,6 +65,6 @@ df_deflactado <- df_eaae %>%
             ci = 100 * ci / ipi_vbp,
             x  = k + l + ci)
 
-# SALVA EXCEL
-# write_xlsx(df_deflactado, "data/df_deflactado.xlsx") 
+# Salva RDS
+# saveRDS(df_deflactado, "data/df_deflactado.rds") 
 
