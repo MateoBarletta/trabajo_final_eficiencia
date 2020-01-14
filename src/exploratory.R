@@ -10,23 +10,23 @@ df_deflactado <- read_excel(here::here("data/df_deflactado.xlsx"))
 df_filtrado <- df_deflactado %>% 
   filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12')) 
 
-# # Df con inputs en logs
-# df_log <- df_deflactado %>% 
-#   rowwise() %>% 
-#   mutate(y  = log(y),
-#          x  = log(sum(ci, k, l)),
-#          k  = log(k),
-#          l  = log(l),
-#          ci = log(ci)) %>% 
-#   filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12')) 
+# Df con inputs en logs
+df_log <- df_deflactado %>%
+  rowwise() %>%
+  mutate(y  = log(y),
+         x  = log(sum(ci, k, l)),
+         k  = log(k),
+         l  = log(l),
+         ci = log(ci)) %>%
+  filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12'))
 
-# Df agrupado
-df_agrupado <- df_deflactado %>% 
-  group_by(anio) %>% 
-  summarise(y  = sum(y),
-            k  = sum(k),
-            l  = sum(l),
-            ci = sum(ci))
+# # Df agrupado
+# df_agrupado <- df_deflactado %>% 
+#   group_by(anio) %>% 
+#   summarise(y  = sum(y),
+#             k  = sum(k),
+#             l  = sum(l),
+#             ci = sum(ci))
 
 # Grafico
 df_log %>% 

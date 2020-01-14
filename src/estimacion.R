@@ -2,8 +2,26 @@ library(tidyverse)
 library(Benchmarking)
 
 # Cargo df
-df <- df_log
 df <- df_filtrado
+
+# Defino funcion MPI DEA (Output oriented)
+calcula_mpi <- function(x_t0, x_t1, y_t0, y_t1){
+  
+  d00 <- dea(x_t0, y_t0, RTS = "crs", ORIENTATION = "out")
+  d01 <- dea(x_t1, y_t1, RTS = "crs", XREF = x_t0, YREF = y_t0, ORIENTATION="out") 
+  d10 <- dea(x_t0, y_t0, RTS = "crs", XREF = x_t1, YREF = y_t1, ORIENTATION="out") 
+  d11 <- dea(x_t1, y_t1, RTS = "crs", ORIENTATION = "out")
+  
+  eff00 <- cbind(1/d00$eff)
+  eff10 <- cbind(1/d10$eff)
+  eff01 <- cbind(1/d01$eff)
+  eff11 <- cbind(1/d11$eff)
+  
+  tfpc <- cbind((eff01/eff00 * eff11/eff10) ^ 0.5)
+  
+  return(tfpc)
+  
+}
 
 #### ESTIMACION POR DIVISION ####
 # Output
@@ -50,6 +68,14 @@ rm(x, y, x0, x1, x2, x3, x4, y0, y1, y2, y3, y4)
 
 
 #### ESTIMACION AGREGADA ####
+# Agrego df para toda la industria
+df_agrupado <- df %>% 
+  group_by(anio) %>% 
+  summarise(y  = sum(y),
+            k  = sum(k),
+            l  = sum(l),
+            ci = sum(ci))
+
 # Output
 yy <- cbind(df_agrupado$y)
 
@@ -91,14 +117,6 @@ tfpc_agr <- tibble(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)
 
 rm(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)
 rm(xx, yy, x_0, x_1, x_2, x_3, x_4, y_0, y_1, y_2, y_3, y_4)
-
-
-
-
-
-
-
-
 
 
 # #Estimacion 2012/2013
@@ -160,8 +178,6 @@ rm(xx, yy, x_0, x_1, x_2, x_3, x_4, y_0, y_1, y_2, y_3, y_4)
 # text(x_2, y2, 1:dim(x1)[1], col="green", adj=-1)
 # text(x_3, y3, 1:dim(x1)[1], col="yellow", adj=-1)
 # text(x_4, y4, 1:dim(x1)[1], col="blue", adj=-1)
-
-
 
 
 

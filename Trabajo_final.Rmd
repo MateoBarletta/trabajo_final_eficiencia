@@ -2,7 +2,7 @@
 title: "Análisis de la productividad industrial en Uruguay"
 subtitle: "Métodos para la Medición de la Eficiencia y la Productividad"
 author: "Mateo Barletta - Eugenia Leira"
-date: "15/1/2020"
+date: "15/01/2020"
 output: pdf_document
 urlcolor: blue
 ---
@@ -81,10 +81,9 @@ df_deflactado %>%
   ggplot(aes(x=x, y=y, color=division)) +
   geom_point() +
   labs(y="VBP", x='Suma de los Inputs') + 
-  ggtitle('Scatterplot de Output e Inputs según división, en niveles') +
+  ggtitle('Scatterplot de Output e Inputs según división') +
   theme_bw()
 ```
-
 
 Como la metodología a emplear es muy sensible a la presencia de *outliers*, también se decide quitar a las de mayory menor VBP. Las divisiones quitadas son las siguientes:
 
@@ -94,29 +93,52 @@ divisiones_quitar %>%
   kable_styling(latex_options =c("HOLD_position", "striped"))
 ```
 
-En el *Gráfico 2* podemos observar como queda la relación entre Inputs y Outputs una vez quitados los outliers y transformadas las variables a logaritmos.
+En el *Gráfico 2* podemos observar como queda la relación entre Inputs y Outputs una vez quitados los outliers.
 
 ```{r}
-df_log %>% 
+df_filtrado %>% 
   ggplot(aes(x=x, y=y, color=division)) +
   geom_point() +
-  labs(y="Log del VBP", x='Log de los Inputs') + 
-  ggtitle('Scatterplot de Output e Inputs según división, en logaritmos') +
+  labs(y="VBP", x='Suma de los Inputs') + 
+  ggtitle('Scatterplot de Output e Inputs según división') +
   theme_bw()
 ```
 
+En la siguiente tabla se presentan los estadísticos descriptivos de las variables, una vez filtrada la base:
+
+```{r}
+tabla_estadisticos %>% 
+  kable(booktabs = T, caption = "Principales estadísticos descriptivos") %>% 
+  kable_styling(latex_options =c("HOLD_position", "striped"))
+```
 
 
 # Metodología
 
+Para probar el supuesto de rendimientos constantes a escala se realiza un modelo lineal MCO sobre del output sobre los inputs y se testea la hipótesis nula de que la suma de los coeficientes es igual a 1. Se consideran los valores en logaritmos:
+
+```{r}
+modelo <- lm(log(y) ~ log(k) + log(l) + log(ci), data = df_filtrado)
+modelo
+linearHypothesis(modelo, c("1*log(k) + 1*log(l) + 1*log(ci) = 1"))
+```
+
+No se rechaza la hipótesis nula de rendimientos constantes a escala, por lo que trabajaremos con este supesto como es habitual en la literatura de productividad industrial.
+
 # Resultados
+
+```{r}
+mpi_tfpc %>% 
+  kable(booktabs = T, caption = "Evolución del Índice de Malmquist, según año y división") %>% 
+  kable_styling(latex_options =c("HOLD_position", "striped"))
+```
 
 # Conclusiones
 
 # Anexo
 
 ```{r}
-divisiones %>% 
+tabla_divisiones %>% 
   kable(booktabs = T, caption = "Divisiones incluídas en el análisis") %>% 
   kable_styling(latex_options =c("HOLD_position", "striped", "scale_down"))
 ```
