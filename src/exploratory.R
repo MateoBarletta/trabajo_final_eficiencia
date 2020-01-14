@@ -1,10 +1,10 @@
 library(tidyverse)
-library(here)
-library(readxl)
 library(ggthemes)
+library(here)
+
 
 # Cargo df
-df_deflactado <- read_excel(here::here("data/df_deflactado.xlsx")) 
+df_deflactado <- readRDS(here::here("data/df_deflactado.rds")) 
 
 # Df con divisiones filtradas
 df_filtrado <- df_deflactado %>% 
@@ -33,8 +33,5 @@ df_log %>%
   ggplot(aes(x=x, y=y, color=division)) +
   geom_point() +
   labs(y="Log del VBP", x='Log de los Inputs') + 
-  ggtitle('Scatterplot de Output e Inputs según división') +
+  ggtitle('Scatterplot de Output e Inputs según división, en logaritmos') +
   theme_bw()
-
-
-
