@@ -45,15 +45,24 @@ Abordaremos la medición de la productividad mediante otro tipo de metodología,
 
 # Antecedentes
 
+A nivel global el sector industrial ha sido uno de los impulsores de crecimiento y desarrollo económico. No obstante, si bien en Uruguay se intentó incorporar un modelo que impulse la industria del país, el modelo de industrialización por sustitución de importaciones (ISI), debido a la dimensión del tamaño interno y la importancia del sector agroexportador, este proceso se extinguió y no fue sostenible en el tiempo.  
+
+A pesar de lo anterior, en Uruguay es uno de los rubros  generadores de empleo más importantes por lo cual se torna relevante estudiar su desempeño. Adicionalmente si se considera a la industria uno de los portadores de cambio técnico resulta relevante analizar cómo se ha comportado en los últimos años.  
+
+El objetivo de este estudio es brindar una aproximación sobre el desempeño productivo del sector industrial en Uruguay para el periodo 2012-2016 desde una perspectiva de eficiencia económica.  
+
+En este sentido, resulta importante relevar la literatura que estudia la productividad de la industria en Uruguay.   
+
+
 # Datos y selección de variables
 
 Los datos utilizados en este trabajo son extraídos de la encuesta anual de actividad económica (EAAE) realizada por el Instituto Nacional de Estadística de Uruguay (INE) [^1]. Se cuenta con información entre 2008 y 2016, aunque a los efectos de este análisis se utilizarán aquellos a partir del 2012 debido a que se observan algunos inconvenientes en la base de datos en el año 2011. 
 
 [^1]: [http://www.ine.gub.uy/web/guest/industria-comercio-y-servicios](http://www.ine.gub.uy/web/guest/industria-comercio-y-servicios)
 
-La EAAE se desagrega a nivel de CIIU, lo que permite realizar el análisis para los diferentes rubros de la actividad industrial, así como tamaño, …. Por otro lado, los datos se publican para 22 divisiones distintas lo que da versatilidad.  En el Anexo se incluye una descripción de todas las divisiones consideradas.
+La EAAE se desagrega a nivel de CIIU, lo que permite realizar el análisis para los diferentes rubros de la actividad industrial, esto significa que los datos se publican para 22 divisiones distintas lo que da una amplica cobertura al estudio.  En el Anexo se incluye una descripción de todas las divisiones consideradas.
 
-Para obtener una base de datos que nos permita efectuar el estudio se deberá depurar la base para quitar outliers y deflactar las variables por un índice de precios agregado para obtener valores constantes de las mismas. Adicionalmente, dentro de los principales desafíos de este trabajo es conseguir obtener buenas aproximaciones del Capital que es un dato engorroso que no está debidamente calculado.
+Para obtener una base de datos que nos permita efectuar el estudio se deberá depurar la base para quitar outliers y deflactar las variables por un índice de precios agregado para obtener valores constantes de las mismas. Los valores considerados son las macrovariables calculadas por el INE a partir de la agregación de los datos de la EAAE ya que no se pudo obtener acceso a los microdatos por tratarse de información confidencial bajo secreto estadístico.  
 
 En particular, se utilizará como variable output el valor bruto de producción (VBP) ya que esta variable refleja correctamente el valor producido y es menos volátil que el valor agregado bruto (VAB); mientras que como inputs se utilizarán las remuneraciones (REM), el consumo de capital fijo (CKF) y el consumo intermedio (CI), ya que son los insumos clásicos de cualquier función de producción utilizados en la literatura. Con estas variables se intenta aproximar al *Producto*, *Capital*, *Trabajo* y *Consumo intermedio* respectivamente.
 
@@ -85,7 +94,7 @@ df_deflactado %>%
   theme_bw()
 ```
 
-Como la metodología a emplear es muy sensible a la presencia de *outliers*, también se decide quitar a las de mayory menor VBP. Las divisiones quitadas son las siguientes:
+Como la metodología a emplear es muy sensible a la presencia de *outliers*, también se decide quitar a las divisiones de mayor y menor VBP. Esta es una práctica habitual en el análisis de la producción industrial ya que algunos sectores por su importancia y peso relativo distorsionan el análisis, como puede ser el caso de la destilación de petróleo o producción de celulosa. También decidimos quitar los sectores de menor peso ya que pueden no estar bien representados en la encuesta, como es el caso de la industria del software que es una actividad más vinculada al área de servicios. Las divisiones quitadas son las siguientes:
 
 ```{r}
 divisiones_quitar %>% 
@@ -115,15 +124,21 @@ tabla_estadisticos %>%
 
 # Metodología
 
-Para probar el supuesto de rendimientos constantes a escala se realiza un modelo lineal MCO sobre del output sobre los inputs y se testea la hipótesis nula de que la suma de los coeficientes es igual a 1. Se consideran los valores en logaritmos:
+Para probar el supuesto de rendimientos constantes a escala se realiza un modelo lineal MCO sobre del output sobre los inputs y se testea la hipótesis nula de que la suma de los coeficientes es igual a 1.  
+
+Primero estimamos el modelo en logaritmos:
 
 ```{r}
-modelo <- lm(log(y) ~ log(k) + log(l) + log(ci), data = df_filtrado)
-modelo
+(modelo <- lm(log(y) ~ log(k) + log(l) + log(ci), data = df_filtrado))
+```
+
+Y luego realizamos el contraste de hipótesis:
+
+```{r}
 linearHypothesis(modelo, c("1*log(k) + 1*log(l) + 1*log(ci) = 1"))
 ```
 
-No se rechaza la hipótesis nula de rendimientos constantes a escala, por lo que trabajaremos con este supesto como es habitual en la literatura de productividad industrial.
+No se rechaza la hipótesis nula de rendimientos constantes a escala, por lo que trabajaremos con este supuesto como es habitual en la literatura de productividad industrial.
 
 # Resultados
 

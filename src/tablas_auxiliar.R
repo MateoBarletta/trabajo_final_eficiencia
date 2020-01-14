@@ -6,10 +6,12 @@ library(skimr)
 library(car)
 
 # Cargo df
-df_eaae <- readRDS("data/df_eaae.rds")
-df_deflactado <- read_excel(here::here("data/df_deflactado.xlsx")) 
+df_eaae       <- readRDS("data/df_eaae.rds")
+df_deflactado <- readRDS("data/df_deflactado.rds")
+df_agrupado   <- readRDS("data/df_agrupado.rds")
+df_filtrado   <- readRDS("data/df_filtrado.rds")
 
-# divisiones
+# Divisiones
 divisiones <- df_eaae %>% 
   select(division, descripcion) %>% 
   distinct() %>% 
@@ -31,7 +33,7 @@ tabla_divisiones <- df_eaae %>%
 matriz_correlaciones <- df_eaae %>% 
   select("vbp", "ci", "ckf", "rem") %>% 
   cor() %>% 
-  as_data_frame() 
+  as_tibble() 
 
 row.names(matriz_correlaciones) <- c("vbp", "ci", "ckf", "rem")
 
@@ -45,9 +47,6 @@ row.names(matriz_correlaciones) <- c("vbp", "ci", "ckf", "rem")
 #   ggtitle('Scatterplot de Output e Inputs según división, en niveles') +
 #   theme_bw()
 
-# Df con divisiones filtradas
-df_filtrado <- df_deflactado %>% 
-  filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12')) 
 
 # Df con inputs en logs
 df_log <- df_deflactado %>% 
@@ -59,13 +58,13 @@ df_log <- df_deflactado %>%
          ci = log(ci)) %>% 
   filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12')) 
 
-# Grafico
-grafico_scatter_logs <- df_log %>%
-  ggplot(aes(x=x, y=y, color=division)) +
-  geom_point() +
-  labs(y="Log del VBP", x='Log de los Inputs') +
-  ggtitle('Scatterplot de Output e Inputs según división') +
-  theme_bw()
+# # Grafico
+# df_log %>%
+#   ggplot(aes(x=x, y=y, color=division)) +
+#   geom_point() +
+#   labs(y="Log del VBP", x='Log de los Inputs') +
+#   ggtitle('Scatterplot de Output e Inputs según división') +
+#   theme_bw()
 
 # Estadísticos descriptivos
 tabla_estadisticos <- df_filtrado %>% 
