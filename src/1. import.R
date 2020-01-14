@@ -1,18 +1,18 @@
 #### IMPORTACION DE ARCHIVOS DE EAAE ####
 
 # CARGA LIBRERIAS
-library(tidyverse)
+library(dplyr)
 library(here)
 library(readxl)
 library(janitor)
-library(writexl)
+
 
 # PATH IMPORTACION ARCHIVOS
 path <- here::here("data", "eaae")
 
 # NOMBRES COLUMNAS
-col1 <- c("seccion",	"division", "descripcion", "VBP", "CI", "VAB", "REM", "IMP","CKF", "EEN")
-col2 <- c("seccion",	"division", "descripcion", "VBP", "CI", "IMP", "CKF", "VAB","REM", "EEN")
+col1 <- c("seccion",	"division", "descripcion", "VBP", "CI", "VAB", "REM", "IMP", "CKF", "EEN")
+col2 <- c("seccion",	"division", "descripcion", "VBP", "CI", "IMP", "CKF", "VAB", "REM", "EEN")
 
 # IMPORTA DFs por año
 df_2016 <- read_excel(file.path(path, "EAE_C2.5_2016.xls"),
@@ -68,9 +68,9 @@ df_2008 <- read_excel(file.path(path, "EAE_C2_2008.xls"),
 
 
 # SALVA EXCEL
-# write_xlsx(df_eaae, "data/eaae.xlsx")
+# saveRDS(df_eaae, "data/eaae.rds")
 
-# LIMPIEZA DE ARCHIVOS AUXILIARES
+# LIMPIEZA DE ARCHIVOS INTERMEDIOS
 rm(df_2008, df_2009, df_2010, df_2011, df_2012, df_2013, df_2014, df_2015, df_2016)
 rm(path, col1, col2)
   
