@@ -20,13 +20,15 @@ df_log <- df_deflactado %>%
          ci = log(ci)) %>%
   filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12'))
 
-# # Df agrupado
-# df_agrupado <- df_deflactado %>% 
-#   group_by(anio) %>% 
-#   summarise(y  = sum(y),
-#             k  = sum(k),
-#             l  = sum(l),
-#             ci = sum(ci))
+# Df agrupado
+df_agrupado <- df_deflactado %>%
+  group_by(anio) %>%
+  summarise(y  = sum(y),
+            k  = sum(k),
+            l  = sum(l),
+            ci = sum(ci))
+
+# saveRDS(df_agrupado, "data/df_agrupado.rds")
 
 # Grafico
 df_log %>% 
