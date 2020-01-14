@@ -2,16 +2,16 @@
 library(dplyr)
 library(here)
 library(readxl)
-library(writexl)
 
 # CARGO DF
-eaae <- read_excel(here::here("data/eaae.xlsx")) %>% 
+eaae <- readRDS("data/eaae.rds") %>% 
   mutate(anio = as.character(anio))
 
-# Agrupo division 29
+# Agrupo divisiones 29 y 30
 division_quitar <- eaae %>% 
   filter(division %in% c('29', '30'))
 
+# Creo df auxiliar para agregar
 division_agregar <- division_quitar %>% 
   group_by() %>%
   summarise(anio        = '2012',
@@ -26,28 +26,17 @@ division_agregar <- division_quitar %>%
             imp         = sum(imp),
             een         = sum(een))
 
+# Quito divisiones separadas y agrego divisiones agregadas
 df_eaae <- eaae %>% 
   anti_join(division_quitar, by= c('anio','division')) %>% 
   bind_rows(division_agregar) %>% 
   arrange(anio, division)
 
-rm(eaae, division_agregar, division_quitar)
-
+# Salva RDS
 # saveRDS(df_eaae, "data/df_eaae.rds")
 
 
-
 #### DEFLACTACION ####
-# Las variables se encuentran en valores corrientes por lo que es necesario deflactarlas.
-# Para eso usaremos distintos índices de precios:
-# 
-# Para el Producto (VBP) y Consumo Intermedio (CI) usaremos el índice de precios implícito del producto del BCU.
-# Para el Capital (CKF) el índice de precios implícitos de la formación bruta de capital fijo del BCU.
-# Para el Trabajo (REM) el índice medio de salarios del INE.
-# 
-# En principio se utilizan todos los índices globales, 
-# para mejorar la estimación se puede considerar utilizar índices abiertos por industria.
-
 # CARGO DEFLACTORES
 deflactores <- read_excel("data/deflactores.xlsx") %>% 
   mutate(anio = as.character(anio))
@@ -68,3 +57,5 @@ df_deflactado <- df_eaae %>%
 # Salva RDS
 # saveRDS(df_deflactado, "data/df_deflactado.rds") 
 
+# Elimina archivos auxiliares
+rm(deflactores, eaae, division_agregar, division_quitar)
