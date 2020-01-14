@@ -1,8 +1,9 @@
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 library(ggthemes)
 library(here)
 
-
+#### DF EXPLORATORIO DE LA BASE DE DATOS ####
 # Cargo df
 df_deflactado <- readRDS(here::here("data/df_deflactado.rds")) 
 
@@ -22,7 +23,7 @@ df_log <- df_deflactado %>%
          ci = log(ci)) %>%
   filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12'))
 
-# Df agrupado
+# Df agrupado para toda la industria
 df_agrupado <- df_deflactado %>%
   group_by(anio) %>%
   summarise(y  = sum(y),
@@ -39,3 +40,6 @@ df_log %>%
   labs(y="Log del VBP", x='Log de los Inputs') + 
   ggtitle('Scatterplot de Output e Inputs según división, en logaritmos') +
   theme_bw()
+# Remueve archivos auxiliares
+rm(df_log)
+
