@@ -67,7 +67,7 @@ df_2008 <- read_excel(file.path(path, "EAE_C2_2008.xls"),
   select(anio, seccion, division, descripcion, vbp, vab, ci, rem, ckf, everything())
 
 
-# SALVA EXCEL
+# SALVA RDS
 # saveRDS(df_eaae, "data/eaae.rds")
 
 # LIMPIEZA DE ARCHIVOS INTERMEDIOS
