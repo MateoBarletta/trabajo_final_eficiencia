@@ -10,6 +10,8 @@ df_deflactado <- readRDS(here::here("data/df_deflactado.rds"))
 df_filtrado <- df_deflactado %>% 
   filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12')) 
 
+# saveRDS(df_filtrado, "data/df_filtrado.rds")
+
 # Df con inputs en logs
 df_log <- df_deflactado %>%
   rowwise() %>%
