@@ -61,4 +61,9 @@ df_log %>%
 
 modelo <- lm(y ~ k + l + ci, data=df_log)
 
+# Tabla TFPC
+mpi_tfpc <- df_filtrado %>% 
+  select(division) %>% 
+  distinct() %>% 
+  rbind('Agregado') %>% bind_cols(bind_rows(tfpc_div, tfpc_agr))
 
