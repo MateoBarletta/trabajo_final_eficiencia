@@ -2,6 +2,8 @@ library(dplyr)
 library(Benchmarking)
 
 # Cargo df
+df_filtrado <- readRDS(here::here("data/df_filtrado.rds")) 
+
 df <- df_filtrado
 
 # Defino funcion MPI DEA (Output oriented)
@@ -24,6 +26,7 @@ calcula_mpi <- function(x_t0, x_t1, y_t0, y_t1){
 }
 
 #### ESTIMACION POR DIVISION ####
+## Creo vectores para estimacion
 # Output
 y  <- cbind(df$y)
 
@@ -60,9 +63,10 @@ tfpc_2016 <- calcula_mpi(x_t0 = x3, x_t1 = x4, y_t0 = y3, y_t1 = y4)
 tfpc_punta <- calcula_mpi(x_t0 = x0, x_t1 = x4, y_t0 = y0, y_t1 = y4) %>% 
   sqrt() 
 
-# Armo tabla tfpc divisiones
+# Armo tabla tfpc divisiones para todos los años
 tfpc_div <- tibble(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)
 
+# Limpieza de archivos auxiliares
 rm(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)
 rm(x, y, x0, x1, x2, x3, x4, y0, y1, y2, y3, y4)
 
@@ -119,6 +123,8 @@ rm(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)
 rm(xx, yy, x_0, x_1, x_2, x_3, x_4, y_0, y_1, y_2, y_3, y_4)
 
 
+
+
 # #Estimacion 2012/2013
 # # Estimate 4 distance functions
 # d00 <- dea(x0, y0, RTS="crs", ORIENTATION="out")
@@ -162,22 +168,6 @@ rm(xx, yy, x_0, x_1, x_2, x_3, x_4, y_0, y_1, y_2, y_3, y_4)
 # tec01 <- teBC.sfa(msfa1)/teBC.sfa(msfa0)
 # 
 # tfpc01 <- tc01*tec01
-
-
-# DEA PLOT
-# dea.plot(x_0, y0, RTS="crs", txt=TRUE, xlim = c(20, 25), ylim = c(20,25))
-# dea.plot(x_1, y1, RTS="crs", add=TRUE, col="red", xlim = c(20, 25), ylim = c(20,25))
-# dea.plot(x_2, y2, RTS="crs", add=TRUE, col="green", xlim = c(20, 25), ylim = c(20,25))
-# dea.plot(x_3, y3, RTS="crs", add=TRUE, col="yellow", xlim = c(20, 25), ylim = c(20,25))
-# dea.plot(x_4, y4, RTS="crs", add=TRUE, col="blue", xlim = c(20, 25), ylim = c(20,25))
-# points(x_1, y1, col="red", pch=16)
-# points(x_2, y2, col="green", pch=16)
-# points(x_3, y3, col="yellow", pch=16)
-# points(x_4, y4, col="blue", pch=16)
-# text(x_1, y1, 1:dim(x1)[1], col="red", adj=-1)
-# text(x_2, y2, 1:dim(x1)[1], col="green", adj=-1)
-# text(x_3, y3, 1:dim(x1)[1], col="yellow", adj=-1)
-# text(x_4, y4, 1:dim(x1)[1], col="blue", adj=-1)
 
 
 
