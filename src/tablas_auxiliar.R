@@ -87,9 +87,22 @@ source('src/estimacion.R', encoding = 'UTF-8')
 modelo <- lm(log(y) ~ log(k) + log(l) + log(ci), data = df_filtrado)
 linearHypothesis(modelo, c("1*log(k) + 1*log(l) + 1*log(ci) = 1"))
 
-# Tabla TFPC
+# Tabla MPI
 mpi_tfpc <- df_filtrado %>% 
   select(division) %>% 
   distinct() %>% 
-  rbind('Agregado') %>% bind_cols(bind_rows(tfpc_div, tfpc_agr))
+  rbind('Promedio') %>% 
+  bind_cols(tfpc_div)
 
+# Tabla TFPC
+tabla_tc <- df_filtrado %>% 
+  select(division) %>% 
+  distinct() %>% 
+  rbind('Promedio') %>% 
+  bind_cols(matriz_tc) %>% 
+  transmute(division,
+            TFPC = `V1`,
+            TC = `V2`,
+            TEC = `V3`,
+            PTEC = `V4`,
+            SEC = `V5`)

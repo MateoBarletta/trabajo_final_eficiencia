@@ -53,10 +53,17 @@ El objetivo de este estudio es brindar una aproximación sobre el desempeño pro
 
 En este sentido, resulta importante relevar la literatura que estudia la productividad de la industria en Uruguay.   
 
+La medición de la productividad no es directa ya que es posible que una unidad productiva utilice distintas combinaciones de insumos en el tiempo que difieran con otras unidades productivas. Existen diversos estudios cuyo objetivo es estudiar la productividad del sector industrial en Uruguay. 
+
+En este sentido, *Casacuberta y Gandelman (2015)* estudian el desempeño productivo de varios sectores económicos de Uruguay, específicamente su objetivo es identificar cuál fue el efecto de la crisis financiera que experimentó el país en el 2002 sobre la productividad total de los factores (*tfp*) de las distintas actividades económicas del país. Para ello, utilizan datos proporcionados por la Encuesta Anual de Actividad Económica del INE para el período 1997-2005 y combinan el uso de dos metodologías,  por un lado, la estimación de productividad siguiendo la metodología de *Levinsohn y Petrin (2003)*, y por otro lado computaron la productividad total de los factores de *Hsieh and Klenow (2009)*. De su análisis concluyen que el cierre de las firmas está asociado con niveles menores de productividad. En particular, el sector industrial del país evidenció en promedio un detrimento de su productividad en los años estudiados.
+
+En otro trabajo, *Carracelas, Casacuberta y Vaillant (2009)* en su estudio sobre el desempeño sectorial heterogéneo se discuten las posibles causantes de la evidencia contradictoria en los estudios de la productividad total de los factores en Uruguay, adicionalmente, analizan el desempeño productivo de los diversos sectores de la economía del país. Este estudio utiliza diversas fuentes de datos tales como Banco Central del Uruguay (BCU), INE y el Instituto de Economía (IECON) a partir del método de números índices de Törnqvist para el período 1991-2007. En particular, encuentran ganancias de productividad en promedio para el sector industrial en los años bajo estudio, resultados opuestos a los encontrados por *Casacuberta y Gandelman (2015)*.
+
+De lo anterior se desprende que no se ha encontrado evidencia empírica concluyente respecto al desempeño productivo del sector industrial en Uruguay. Como resultado, resulta interesante analizar cuáles son los efectos encontrados en la productividad de este rubro utilizando un método diferente como es el Índice de Productividad de Malmquist (MPI).
 
 # Datos y selección de variables
 
-Los datos utilizados en este trabajo son extraídos de la encuesta anual de actividad económica (EAAE) realizada por el Instituto Nacional de Estadística de Uruguay (INE) [^1]. Se cuenta con información entre 2008 y 2016, aunque a los efectos de este análisis se utilizarán aquellos a partir del 2012 debido a que se observan algunos inconvenientes en la base de datos en el año 2011. 
+Los datos utilizados en este trabajo son extraídos de la Encuesta Anual de Actividad Económica (EAAE) realizada por el Instituto Nacional de Estadística de Uruguay (INE) [^1]. Se cuenta con información entre 2008 y 2016, aunque a los efectos de este análisis se utilizarán aquellos a partir del 2012 debido a que se observan algunos inconvenientes en la base de datos en el año 2011. 
 
 [^1]: [http://www.ine.gub.uy/web/guest/industria-comercio-y-servicios](http://www.ine.gub.uy/web/guest/industria-comercio-y-servicios)
 
@@ -76,10 +83,10 @@ matriz_correlaciones %>%
 
 Las variables se encuentran en valores corrientes. Para una mejor aproximación de la función de producción es deseable trabajar a niveles constantes, ya que de esta manera se aislan los efectos de los precios y se aproxima mejor el valor unitario de los insumos y el producto. Por esta razón se decide utilizar un deflactor específico para cada variable, como se detalla a continuación:
 
-+ **Producto:** Índice de precios implícitos de la producción, calculado por el BCU.
-+ **Capital:** Índice de precios implícitos de la formación bruta de capital, calculado por el BCU.
-+ **Trabajo:** Índice medio de salarios, calculado por el INE.
-+ **Consumo intermedio:** Índice de precios implícitos de la producción, calculado por el BCU.
++ **Producto (Y):** Índice de precios implícitos de la producción, calculado por el BCU.
++ **Capital (K):** Índice de precios implícitos de la formación bruta de capital, calculado por el BCU.
++ **Trabajo (L):** Índice medio de salarios, calculado por el INE.
++ **Consumo intermedio (CI):** Índice de precios implícitos de la producción, calculado por el BCU.
 
 Para simplificar la deflactación se utilizan los índices agregados para toda la industria. El deflactar el producto y el consumo intermedio por el mismo índice de precios conlleva el supuesto implícito de que la evolución de precios del producto y de las materias primas es la misma.
 
@@ -102,7 +109,7 @@ divisiones_quitar %>%
   kable_styling(latex_options =c("HOLD_position", "striped"))
 ```
 
-En el *Gráfico 2* podemos observar como queda la relación entre Inputs y Outputs una vez quitados los outliers.
+En el *Gráfico 2* podemos observar como queda la relación entre los *inputs* y el *outputs* una vez quitados los *outliers*.
 
 ```{r}
 df_filtrado %>% 
@@ -124,7 +131,35 @@ tabla_estadisticos %>%
 
 # Metodología
 
-Para probar el supuesto de rendimientos constantes a escala se realiza un modelo lineal MCO sobre del output sobre los inputs y se testea la hipótesis nula de que la suma de los coeficientes es igual a 1.  
+Con el fin de efectuar el estudio se aplicará el Índice de Productividad Malmquist (MPI) que examina el crecimiento de la productividad total de los factores. Este índice se construye midiendo la distancia radial entre los *inputs* y los *outputs* observados en dos períodos, en relación con la tecnología de referencia. Es decir, evalúa cada observación referente al grupo en dos períodos de tiempo diferentes, generando una medida de eficiencia para la unidad bajo análisis. 
+
+Cuando la función de distancia es orientada al *input*, caracterizan una tecnología por la máxima contracción proporcional posible en el uso de los insumos, dado un nivel del producto constante. Mientras que cuando está orientado al *output* se considera la expansión proporcional máxima del vector de producción, dado los insumos utilizados. El MPI, a diferencia de los índices tradicionales, realiza de forma conjunta las asignaciones entre los dos períodos de los *inputs* y los *outputs*. 
+
+En este estudio se efectuará el cálculo del MPI utilizando un método DEA. Éste permite, a través de la programación lineal, construir una frontera no paramétrica que contiene todas las unidades eficientes y sus posibles combinaciones. Como resultado, aquellas unidades ineficientes quedarán por fuera de esta frontera, midiéndose la eficiencia de cada división con respecto a dicha frontera. Cuando la función de distancia es orientada al *input*, caracterizan una tecnología por la máxima contracción proporcional posible en el uso de los insumos, dado un nivel del producto constante. Mientras que cuando está orientado al *output* se considera la expansión proporcional máxima del vector de producción, dado los insumos utilizados. El MPI, a diferencia de los índices tradicionales, realiza de forma conjunta las asignaciones entre los dos períodos de los *inputs* y los *outputs*. 
+
+En este caso, se utilizará una orientación al *output* ya que para medir los cambios en la productividad de la industria buscamos maximizar la producción. Cuando el estudio es de orientación al *output*, un valor del índice superior a la unidad representa un incremento en la productividad en el tiempo. Es decir, cuando el sector tiene una mejora en la productividad (entre t y t+1), entonces el resultado arrojado por el índice será superior a 1; por el contrario, si el resultado es inferior a la unidad se percibe un descenso en la productividad; mientras que si el resultado es igual a la unidad es porque no se evidenció ningún cambio en el período bajo estudio.
+
+El cambio productivo de una división en particular (y del sector industrial en general) entre el período t y t+1 puede determinarse a partir de la siguiente fórmula:
+
+FORMULA DEL INDICE
+
+Adicionalmente, el MPI se descompone en cambios de eficiencia técnica (TEC), correspondiente al primer componente de la expresión que prosigue y cambio tecnológicos (TC), correspondiente al segundo componente.
+
+FORMULA DESCOMPOSICION
+
+Si el cambio de eficiencia es superior a la unidad, entonces hay un efecto de catching-up en el tiempo. Si el componente del cambio tecnológico es superior a uno, entonces estamos frente a un progreso tecnológico en el tiempo. Por su parte, Fare et at.(1994) plantea que a su vez, es posible descomponer los cambios de eficiencia en cambios de eficiencia de escala (SEC) y en cambios de eficiencia técnica pura (PETEC). Por lo tanto, el MPI orientado al output también puede expresarse a través de la siguiente ecuación:
+
+FORMULA FINAL
+
+Para obtener el el índice orientado al output es necesario calcular 208 funciones de distancia [^2]. Estas funciones representan la eficiencia técnica, por lo que permiten comparar los requerimientos utilizados por las unidades ineficientes a partir de los productos e insumos utilizado por las unidades eficientes. 
+
+[^2]: Esto es porque es necesario calcular cuatro funciones distancia por división, lo que resulta de 16 divisiones (K) por año (T=5). Al utilizar la fórmula K*(3T-2) el resultado que arroja es 208.
+
+Este enfoque supone convexidad de datos. Esta metodología además, cuenta con dos ventajas principales, en primer lugar no es necesario información de precios sino que utiliza datos de unidades físicas (cantidades) para los insumos y productos lo que permite comparar las diferentes actividades productivas dentro del sector industrial. En segundo lugar, no se utiliza el supuesto de maximización de beneficios o minimización de costos y el análisis no está atado a una forma funcional ni supuestos de especificación. Sin embargo, es muy sensible a outliers pudiendo generar ruido en las estimaciones, por dicho motivo es que estos no fueron consideraron para el análisis, tal como se mencionó en la sección anterior.
+
+Por su parte, de acuerdo a *Caves (1982)* el MPI no asume un tipo específico de retornos a escala. No obstante, en los estudios realizados por *Griffel - Tatj’e y Lovell (1995)* se prueba que bajo rendimientos que no son constantes a escala el MPI falla en identificar las mejoras en la productividad a través de la mejora en la eficiencia de escala y para algunas firmas. En este estudio utilizaremos retornos constantes a escala dado que al regresar el valor bruto de producción con el consumo intermedio, capital y trabajo, se desprende que no se rechaza la hipótesis nula de retornos constantes a escala. 
+
+Para justificar el supuesto de rendimientos constantes a escala utilizado se realiza un modelo lineal MCO del *output* sobre los *inputs* y se testea la hipótesis nula de que la suma de los coeficientes es igual a la unidad.
 
 Primero estimamos el modelo en logaritmos:
 
@@ -138,15 +173,58 @@ Y luego realizamos el contraste de hipótesis:
 linearHypothesis(modelo, c("1*log(k) + 1*log(l) + 1*log(ci) = 1"))
 ```
 
-No se rechaza la hipótesis nula de rendimientos constantes a escala, por lo que trabajaremos con este supuesto como es habitual en la literatura de productividad industrial.
+Como resultado de la prueba de hipótesis no se rechaza la hipótesis nula de rendimientos constantes a escala, por lo que trabajaremos con este supuesto, ello es habitual en la literatura de productividad industrial.
 
 # Resultados
+
+Con la base ya depurada y las variables deflactadas realizamos el cálculo del Índice de Malmquist para las 16 divisiones incluídas. Como el índice mide la variación de la productividad entre dos períodos se indica como valor de índice para un año dado a la variación respecto al año anterior.
+
+Comenzamos realizando el cálculo de todas las funciones de distancia involucradas. Estas funciones se calculan para cada período tomando como base el período anterior. También se calcula el índice punta a punta, es decir entre 2012 y 2016. En el siguiente gráfico se muestran la frontera de eficiencia para el primer y el último año  considerados:
+
+```{r}
+source('src/graficos.R', encoding = 'UTF-8')
+```
+
+Una vez calculadas las funciones de distancia, utilizando el inverso de las mismas se obtiene el MPI. En la siguiente tabla se muestra la variación del índice para cada año según la división considerada. En la última columna se muestra la variación punta a punta. La última fila muestra el resultado de toda la industria, es decir agrupando todos los valores en valores constantes.
 
 ```{r}
 mpi_tfpc %>% 
   kable(booktabs = T, caption = "Evolución del Índice de Malmquist, según año y división") %>% 
   kable_styling(latex_options =c("HOLD_position", "striped"))
 ```
+
+El índice agregado arroja que en promedio hubo una ganancia de 2,02\% en productividad, concentrada en los años 2013 y 2014, ya que en los años 2015 y 2016 se ven caídas en el MPI. Los resultados muestran que 11 de las 16 divisiones tuvieron ganancias de productividad en promedio entre los años 2012 y 2016. Los sectores con mayores ganancias de productividad en el período analizado son: *14 - Fabricación de prendas de vestir* y *33 - Reparación e instalación de maquinaria y equipo*.  Por otro lado los sectores de peor desempeño son:  *31 - Fabricación de muebles* y *28 - Fabricación de maquinaria y equipo*. La siguiente gráfica muestra la evolución del MPI para estas divisiones:
+
+```{r}
+mpi_tfpc %>% 
+  select(-tfpc_punta) %>% 
+  filter(division %in% c('14', '33', '31', '28')) %>% 
+  pivot_longer(values_to = 'MPI', names_to = 'Año', names_prefix="tfpc_", -division) %>% 
+  ggplot(aes(x = Año, y = MPI, color = division)) +
+  geom_point() +
+  geom_line(aes(group = division)) +
+  ggtitle("Evolución de la divisiones con mejor y peor desempeño") +
+  labs(color = 'División') +
+  theme_bw()
+```
+
+## Descomposición del Índice
+
+Como se indico en el apartado metodológico el MPI puede ser descompuesto en cambios en la eficiencia (TEC) y cambio técnico (TC). Aplicamos esta descomposición para la viariación punta a punta y obtenemos el TEC y el TC. Adicionalmente se descomponen el cambio en eficiencia en cambio de eficiencia de escala (SEC) y  cambio técnico puro (PTEC). Se incluye en la última fila el promedio simple de todas las divisiones.  
+
+En la siguiente tabla se muestran los resultados de la descomposición:
+
+```{r}
+tabla_tc %>% 
+  kable(booktabs = T, caption = "Descomposición del cambio técnico según división") %>% 
+  kable_styling(latex_options =c("HOLD_position", "striped"))
+```
+
+La descomposición nos permite observar que la ganancia de productividad promedio de 2,02\%
+se puede descomponer en un una ganancia de 5,29\% cambio técnico y una pérdida de 3,15\% de cambio en la eficiencia técnica. Es decir que los aumentos de productividad vienen dados por mejoras promedio en la tecnología de producción y no en la eficiencia.
+
+Cuando analizamos las divisiones de mejor desempeño vemos que la ganancia en productividad se explica por ganancias de similar magnitud en TEC y TC para la división *14 - Fabricación de prendas de vestir*. En el caso de *33 - Reparación e instalación de maquinaria y equipo* vemos que el aumento de la TFPC viene de la mano de un fuerte aumento en el cambio técnico.
+
 
 # Conclusiones
 

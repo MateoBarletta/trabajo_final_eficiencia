@@ -60,67 +60,104 @@ tfpc_2015 <- calcula_mpi(x_t0 = x2, x_t1 = x3, y_t0 = y2, y_t1 = y3)
 tfpc_2016 <- calcula_mpi(x_t0 = x3, x_t1 = x4, y_t0 = y3, y_t1 = y4)
 
 # Calculo MPI punta a punta (2012 a 2016)
-tfpc_punta <- calcula_mpi(x_t0 = x0, x_t1 = x4, y_t0 = y0, y_t1 = y4) %>% 
-  sqrt() 
+tfpc_punta <- calcula_mpi(x_t0 = x0, x_t1 = x4, y_t0 = y0, y_t1 = y4) 
 
 # Armo tabla tfpc divisiones para todos los años
-tfpc_div <- tibble(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)
+tfpc_div <- tibble(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta) %>% 
+  rbind(colMeans(tibble(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)))
+  
+
+##### DESCOMPOSICIÓN DEL MPI #####
+# Estimo las funciones de distancia
+d00 <- dea(x0, y0, RTS = "crs", ORIENTATION = "out")
+d40 <- dea(x0, y0, RTS = "crs", XREF = x4, YREF = y4, ORIENTATION = "out") 
+d04 <- dea(x4, y4, RTS = "crs", XREF = x0, YREF = y0, ORIENTATION="out") 
+d44 <- dea(x4, y4, RTS = "crs", ORIENTATION = "out")
+
+# Funciones de Shepard (inverso)
+eff00 <- cbind(1/d00$eff)
+eff40 <- cbind(1/d40$eff)
+eff04 <- cbind(1/d04$eff)
+eff44 <- cbind(1/d44$eff)
+
+# Cambio en la eficiencia
+# TEC  = PECH x SEC
+# TFPC = TEC x TC
+tec <- cbind(eff44/eff00)
+
+# Cambio tecnico
+tc <- cbind((eff04/eff44 * eff00/eff40)^0.5)
+
+# Pure and scale efficiency decomposition
+d00v   <-  dea(x0 ,y0, RTS="vrs", ORIENTATION="out");
+d44v   <-  dea(x4, y4, RTS="vrs", ORIENTATION="out") 
+eff00v <- cbind(1/d00v$eff)
+eff44v <- cbind(1/d44v$eff)
+pech <- cbind(eff44v/eff00v)
+sech <- cbind((eff00v/eff00)/(eff44v/eff44))
+
+m <- cbind(tfpc_punta, tc, tec, pech, sech) 
+matriz_tc <- m %>% 
+  rbind(colMeans(m)) %>% 
+  as_tibble()
+
 
 # Limpieza de archivos auxiliares
-rm(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)
+rm(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta, m)
 rm(x, y, x0, x1, x2, x3, x4, y0, y1, y2, y3, y4)
+rm(d00v, d44v, eff00v, eff44v, pech, sech, tec, tc, d00, d40, d04, d44, eff00, eff40, eff04, eff44)
 
 
-#### ESTIMACION AGREGADA ####
-# Agrego df para toda la industria
-df_agrupado <- df %>% 
-  group_by(anio) %>% 
-  summarise(y  = sum(y),
-            k  = sum(k),
-            l  = sum(l),
-            ci = sum(ci))
-
-# Output
-yy <- cbind(df_agrupado$y)
-
-# Inputs
-xx <- cbind(df_agrupado$k, df_agrupado$l, df_agrupado$ci)
-
-# Año 2012 (base) 
-y_0 <- matrix(c(yy[1,1]), ncol=1)
-x_0 <- matrix(c(xx[1,1:3]), ncol=3) 
-
-# Año 2013
-y_1 <- matrix(c(yy[2,1]), ncol=1)
-x_1 <- matrix(c(xx[2,1:3]), ncol=3) 
-
-# Año 2014
-y_2 <- matrix(c(yy[3,1]), ncol=1)
-x_2 <- matrix(c(xx[3,1:3]), ncol=3) 
-
-# Año 2015
-y_3 <- matrix(c(yy[4,1]), ncol=1)
-x_3 <- matrix(c(xx[4,1:3]), ncol=3) 
-
-# Año 2016
-y_4 <- matrix(c(yy[5,1]), ncol=1)
-x_4 <- matrix(c(xx[5,1:3]), ncol=3) 
-
-# Calculo MPI para todos los intervalos
-tfpc_2013 <- calcula_mpi(x_t0 = x_0, x_t1 = x_1, y_t0 = y_0, y_t1 = y_1)
-tfpc_2014 <- calcula_mpi(x_t0 = x_1, x_t1 = x_2, y_t0 = y_1, y_t1 = y_2)
-tfpc_2015 <- calcula_mpi(x_t0 = x_2, x_t1 = x_3, y_t0 = y_2, y_t1 = y_3)
-tfpc_2016 <- calcula_mpi(x_t0 = x_3, x_t1 = x_4, y_t0 = y_3, y_t1 = y_4)
-
-# Calculo MPI punta a punta (2012 a 2016)
-tfpc_punta <- calcula_mpi(x_t0 = x_0, x_t1 = x_4, y_t0 = y_0, y_t1 = y_4) %>% 
-  sqrt() 
-
-# Armo tabla tfpc divisiones
-tfpc_agr <- tibble(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)
-
-rm(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)
-rm(xx, yy, x_0, x_1, x_2, x_3, x_4, y_0, y_1, y_2, y_3, y_4)
+# #### ESTIMACION AGREGADA ####
+# # Agrego df para toda la industria
+# df_agrupado <- df %>% 
+#   group_by(anio) %>% 
+#   summarise(y  = sum(y),
+#             k  = sum(k),
+#             l  = sum(l),
+#             ci = sum(ci))
+# 
+# # Output
+# yy <- cbind(df_agrupado$y)
+# 
+# # Inputs
+# xx <- cbind(df_agrupado$k, df_agrupado$l, df_agrupado$ci)
+# 
+# # Año 2012 (base) 
+# y_0 <- matrix(c(yy[1,1]), ncol=1)
+# x_0 <- matrix(c(xx[1,1:3]), ncol=3) 
+# 
+# # Año 2013
+# y_1 <- matrix(c(yy[2,1]), ncol=1)
+# x_1 <- matrix(c(xx[2,1:3]), ncol=3) 
+# 
+# # Año 2014
+# y_2 <- matrix(c(yy[3,1]), ncol=1)
+# x_2 <- matrix(c(xx[3,1:3]), ncol=3) 
+# 
+# # Año 2015
+# y_3 <- matrix(c(yy[4,1]), ncol=1)
+# x_3 <- matrix(c(xx[4,1:3]), ncol=3) 
+# 
+# # Año 2016
+# y_4 <- matrix(c(yy[5,1]), ncol=1)
+# x_4 <- matrix(c(xx[5,1:3]), ncol=3) 
+# 
+# # Calculo MPI para todos los intervalos
+# tfpc_2013 <- calcula_mpi(x_t0 = x_0, x_t1 = x_1, y_t0 = y_0, y_t1 = y_1)
+# tfpc_2014 <- calcula_mpi(x_t0 = x_1, x_t1 = x_2, y_t0 = y_1, y_t1 = y_2)
+# tfpc_2015 <- calcula_mpi(x_t0 = x_2, x_t1 = x_3, y_t0 = y_2, y_t1 = y_3)
+# tfpc_2016 <- calcula_mpi(x_t0 = x_3, x_t1 = x_4, y_t0 = y_3, y_t1 = y_4)
+# 
+# # Calculo MPI punta a punta (2012 a 2016)
+# tfpc_punta <- calcula_mpi(x_t0 = x_0, x_t1 = x_4, y_t0 = y_0, y_t1 = y_4) 
+# 
+# # Armo tabla tfpc divisiones
+# tfpc_agr <- tibble(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)
+# 
+# # Limpieza de archivos auxiliares
+# rm(tfpc_2013, tfpc_2014, tfpc_2015, tfpc_2016, tfpc_punta)
+# rm(xx, yy, x_0, x_1, x_2, x_3, x_4, y_0, y_1, y_2, y_3, y_4)
 
 
 
