@@ -32,34 +32,38 @@ source('src/tablas_auxiliar.R')
 
 # Introducción
 
-En este trabajo nos proponemos realizar una primera aproximación a la productividad del sector industrial de Uruguay a partir de los datos de la Encuesta Anual de Actividad Económica (EAAE) realizada por el Instituto Nacional de Estadística (INE). En particular este estudio permitirá identificar cuales sectores industriales mostraron un mejor comportamiento productivo.  
+En este trabajo se propone realizar una primera aproximación a la productividad del sector industrial de Uruguay a partir de los datos de la Encuesta Anual de Actividad Económica (EAAE) realizada por el Instituto Nacional de Estadística (INE). En particular este estudio permitirá identificar cuales sectores industriales mostraron un mejor comportamiento productivo en el período bajo estudio.
 
 La productividad total de los factores es un tema con escasa investigación en la agenda de Uruguay pero que ocupa un rol central en la agenda de crecimiento. La poca disponibilidad de datos, así como el alto rezago en la publicación de los mismos hace de esta temática un tema poco abordado por la academia nacional. Adicionalmente la gran mayoría de los trabajos existentes se basan en técnicas de contabilidad del crecimiento.  
 
-El sector industrial representa un interesante objeto de estudio por la heterogeneidad que lo compone. La metodología nos permite realizar distintas agrupaciones, por código CIIU, por tamaño de empresa entre otras. Los datos se publican para 22 divisiones distintas lo que da versatilidad. Debido a la disponibilidad de datos el sector industrial es el más estudiado en los trabajos de productividad, por lo que existe una literatura de referencia.  
-
-Para llevar a cabo el estudio se aplicará la metodología del Índice de Malmquist para el sector industrial uruguayo. Así como también se descompondrá la variación del cambio tecnológico (TC) y cambios en la eficiencia técnica (TEC).  
+El sector industrial representa un interesante objeto de estudio por la heterogeneidad que lo compone. Los datos se publican para 22 divisiones distintas lo que da versatilidad. Debido a la disponibilidad de datos el sector industrial es el más estudiado en los trabajos de productividad, por lo que existe una literatura de referencia.  
 
 Existen dos caminos para el cálculo de la productividad. Una primera alternativa y la más utilizada es utilizar las técnicas de contabilidad de crecimiento. Estas técnicas permiten descomponer el crecimiento del producto según el crecimiento de los *inputs* y así obtener el residuo de Solow - en honor al investigador Robert Solow - también interpretado como cambio tecnológico o cambios en la productividad. Este método ampliamente utilizado en las últimas décadas (el trabajo pionero de Solow es de 1957) necesita asumir una función de producción del tipo paramétrico por lo que es necesario conocer los valores fijos de los parámetros.  
 
-Abordaremos la medición de la productividad mediante otro tipo de metodología, este es un enfoque  semi-paramétrico utilizando métodos de frontera. 
+Se abordará la medición de la productividad mediante otro tipo de metodología, este es un enfoque  semi-paramétrico utilizando métodos de frontera. 
 
 
 # Antecedentes
 
-A nivel global el sector industrial ha sido uno de los impulsores de crecimiento y desarrollo económico. No obstante, si bien en Uruguay se intentó incorporar un modelo que impulse la industria del país, el modelo de industrialización por sustitución de importaciones (ISI), debido a la dimensión del tamaño interno y la importancia del sector agroexportador, este proceso se extinguió y no fue sostenible en el tiempo.  
+El sector industrial ha sido uno de los impulsores de crecimiento y desarrollo económico a nivel global e históricamente ha sido considerado uno de los portadores de cambio técnico más relevantes, habiéndose generado grandes invenciones en este rubro.  
 
-A pesar de lo anterior la industria en Uruguay es uno de los rubros  generadores de empleo más importantes por lo cual se torna relevante estudiar su desempeño. Adicionalmente si se considera a la industria uno de los portadores de cambio técnico resulta relevante analizar cómo se ha comportado en los últimos años.  
+En la primera mitad del siglo XX en América Latina se llevaron a cabo políticas cuyo objetivo fue impulsar la industria de los países de la región, dicho impulso fue conocido como el modelo de industrialización por sustitución de importaciones (ISI) que fue muy exitoso por muchos años. No obstante, debido a la dimensión del mercado interno y la importancia del sector agroexportador en Uruguay , este proceso se extinguió y no fue sostenible en el tiempo. A pesar de lo anterior, hasta el día de hoy es uno de los rubros generadores de empleo más importantes del país por lo cual se torna relevante estudiar su desempeño económico a lo largo del tiempo.
 
-El objetivo de este estudio es brindar una aproximación sobre el desempeño productivo del sector industrial en Uruguay para el periodo 2012-2016 desde una perspectiva de eficiencia económica. Por esto resulta importante relevar la literatura que estudia la productividad de la industria en Uruguay.   
+El objetivo de este estudio es brindar una aproximación sobre el desempeño productivo del sector industrial en Uruguay para el periodo 2012-2016 desde una perspectiva de eficiencia económica.
 
-La medición de la productividad no es directa ya que es posible que una unidad productiva utilice distintas combinaciones de insumos en el tiempo que difieran con otras unidades productivas. Existen diversos trabajos cuyo objetivo es estudiar la productividad del sector industrial en Uruguay. 
+En este sentido, resulta importante relevar la literatura que estudia la productividad de la industria. Es importante destacar, que la medición de la productividad no es directa ya que es posible que una unidad productiva utilice distintas combinaciones de insumos en el tiempo que difieran con otras unidades productivas. 
+
+Dada la importancia de dicho rubro, en el 2018 el Banco de Desarrollo para América Latina (CAF) llevó adelante un estudio sobre la productividad de la industria manufacturera para América Latina. El objetivo de este estudio es, en primer lugar, determinar en qué medida la brecha de productividad de esta región se debe a una peor asignación de recursos entre sectores en comparación a las economías desarrolladas, y en segundo lugar identificar cuáles son los establecimientos que tienen menor productividad. El período de estudio utilizado depende de la información disponible registrada por los países y varía entre 1995 y 2016, los datos surgen de encuestas de actividad económica y registros administrativos. Este estudio concluye en primer lugar que los establecimientos productivos en América Latina son menos eficientes que sus contrapartes en Estados Unidos y en segundo lugar que se destinan recursos a establecimientos que son menos productivos en estos países.
+
+Adicionalmente, existen diversos estudios cuyo objetivo es estudiar la productividad del sector industrial en Uruguay.  
 
 En este sentido, *Casacuberta y Gandelman (2015)* estudian el desempeño productivo de varios sectores económicos de Uruguay, específicamente su objetivo es identificar cual fue el efecto de la crisis financiera que experimentó el país en el año 2002 sobre la productividad total de los factores (*tfp*) de las distintas actividades económicas del país. Para ello, utilizan datos proporcionados por la Encuesta Anual de Actividad Económica del INE para el período 1997-2005 y combinan el uso de dos metodologías, por un lado, la estimación de productividad siguiendo la metodología de *Levinsohn y Petrin (2003)*, y por otro lado computaron la productividad total de los factores de *Hsieh and Klenow (2009)*. De su análisis concluyen que el cierre de las firmas está asociado con niveles menores de productividad. En particular, el sector industrial del país evidenció en promedio un detrimento de su productividad en los años estudiados.
 
 En otro trabajo, *Carracelas, Casacuberta y Vaillant (2009)* en su estudio sobre el desempeño sectorial discuten las posibles causantes de la evidencia contradictoria en los estudios de la productividad total de los factores en Uruguay. Adicionalmente analizan el desempeño productivo de los diversos sectores de la economía del país. Este estudio utiliza diversas fuentes de datos tales como Banco Central del Uruguay (BCU), INE y el Instituto de Economía (IECON) a partir del método de números índices de Törnqvist para el período 1991-2007. En particular, encuentran ganancias de productividad en promedio para el sector industrial en los años bajo estudio, resultados opuestos a los encontrados por *Casacuberta y Gandelman (2015)*.
 
 De lo anterior se desprende que no se ha encontrado evidencia empírica concluyente respecto al desempeño productivo del sector industrial en Uruguay. Por esto es interesante analizar cuáles son los efectos encontrados en la productividad de este rubro utilizando un método diferente como es el Índice de Productividad de Malmquist (MPI).
+
+Por su parte, existen diversos estudios que utilizan el MPI para evaluar los cambios del desempeño productivo en diferentes ámbitos, pero no se han encontrados documentos que utilicen dicha metodología para analizar el desempeño de la industria en Uruguay.
 
 # Datos y selección de variables
 
@@ -101,7 +105,7 @@ df_deflactado %>%
   theme_bw()
 ```
 
-Como la metodología a emplear es muy sensible a la presencia de *outliers*, también se decide quitar a las divisiones de mayor y menor VBP. Esta es una práctica habitual en el análisis de la producción industrial ya que algunos sectores por su importancia y peso relativo distorsionan el análisis, como puede ser el caso de la destilación de petróleo o producción de celulosa. También decidimos quitar los sectores de menor peso ya que pueden no estar bien representados en la encuesta, como es el caso de la industria del software que es una actividad más vinculada al área de servicios. Las divisiones quitadas son las siguientes:
+Como la metodología a emplear es muy sensible a la presencia de *outliers*, también se decide quitar a las divisiones de mayor y menor VBP. Esta es una práctica habitual en el análisis de la producción industrial ya que algunos sectores por su importancia y peso relativo distorsionan el análisis, como puede ser el caso de la destilación de petróleo o producción de celulosa. También decidimos quitar los sectores de menor peso ya que pueden no estar bien representados en la encuesta, como es el caso de la industria del software que es una actividad más vinculada al área de servicios. Las divisiones que no fueron consideradas son las siguientes:
 
 ```{r}
 divisiones_quitar %>% 
@@ -120,7 +124,7 @@ df_filtrado %>%
   theme_bw()
 ```
 
-En la siguiente tabla se presentan los estadísticos descriptivos de las variables, una vez filtrada la base:
+Finalmente se presentan los estadísticos descriptivos de las variables, una vez filtrada la base:
 
 ```{r}
 tabla_estadisticos %>% 
@@ -132,33 +136,41 @@ tabla_estadisticos %>%
 
 # Metodología
 
-Con el fin de efectuar el estudio se aplicará el Índice de Productividad Malmquist (MPI) que examina el crecimiento de la productividad total de los factores. Este índice se construye midiendo la distancia radial entre los *inputs* y los *outputs* observados en dos períodos, en relación con la tecnología de referencia. Es decir, evalúa cada observación referente al grupo en dos períodos de tiempo diferentes, generando una medida de eficiencia para la unidad bajo análisis. 
+Con el fin de efectuar el estudio se aplica el Índice de Productividad Malmquist (MPI) que examina el crecimiento de la productividad total de los factores. Este índice se construye midiendo la distancia radial entre los *inputs* y los *outputs* observados en dos períodos, en relación con la tecnología de referencia. Es decir, evalúa cada observación referente al grupo en dos períodos de tiempo diferentes, generando una medida de eficiencia para la unidad bajo análisis. 
 
-Cuando la función de distancia es orientada al *input*, caracterizan una tecnología por la máxima contracción proporcional posible en el uso de los insumos, dado un nivel del producto constante. Mientras que cuando está orientado al *output* se considera la expansión proporcional máxima del vector de producción, dado los insumos utilizados. El MPI, a diferencia de los índices tradicionales, realiza de forma conjunta las asignaciones entre los dos períodos de los *inputs* y los *outputs*. 
+El cálculo del MPI se lleva a cabo utilizando un método DEA. Éste permite, a través de la programación lineal, construir una frontera no paramétrica que contiene todas las unidades eficientes y sus posibles combinaciones. Como resultado, aquellas unidades ineficientes quedarán por fuera de esta frontera, midiéndose la eficiencia de cada división con respecto a dicha frontera. Cuando la función de distancia es orientada al *input*, caracterizan una tecnología por la máxima contracción proporcional posible en el uso de los insumos, dado un nivel del producto constante. Mientras que cuando está orientado al *output* se considera la expansión proporcional máxima del vector de producción, dado los insumos utilizados. El MPI, a diferencia de los índices tradicionales, realiza de forma conjunta las asignaciones entre los dos períodos de los *inputs* y los *outputs*. 
 
-En este estudio se efectuará el cálculo del MPI utilizando un método DEA. Éste permite, a través de la programación lineal, construir una frontera no paramétrica que contiene todas las unidades eficientes y sus posibles combinaciones. Como resultado, aquellas unidades ineficientes quedarán por fuera de esta frontera, midiéndose la eficiencia de cada división con respecto a dicha frontera. Cuando la función de distancia es orientada al *input*, caracterizan una tecnología por la máxima contracción proporcional posible en el uso de los insumos, dado un nivel del producto constante. Mientras que cuando está orientado al *output* se considera la expansión proporcional máxima del vector de producción, dado los insumos utilizados. El MPI, a diferencia de los índices tradicionales, realiza de forma conjunta las asignaciones entre los dos períodos de los *inputs* y los *outputs*. 
-
-En este caso, se utilizará una orientación al *output* ya que para medir los cambios en la productividad de la industria buscamos maximizar la producción. Cuando el estudio es de orientación al *output*, un valor del índice superior a la unidad representa un incremento en la productividad en el tiempo. Es decir, cuando el sector tiene una mejora en la productividad (entre t y t+1), entonces el resultado arrojado por el índice será superior a 1; por el contrario, si el resultado es inferior a la unidad se percibe un descenso en la productividad; mientras que si el resultado es igual a la unidad es porque no se evidenció ningún cambio en el período bajo estudio.
+En este caso, se utilizará una orientación al *output* ya que para medir los cambios en la productividad de la industria buscamos maximizar la producción. Cuando el estudio es de orientación al *output*, un valor del índice superior a la unidad representa un incremento en la productividad en el tiempo. Es decir, cuando el sector tiene una mejora en la productividad (entre t y t+1), entonces el resultado arrojado por el índice será superior a uno; por el contrario, si el resultado es inferior a la unidad se percibe un descenso en la productividad; mientras que si el resultado es igual a la unidad es porque no se evidenció ningún cambio en el período bajo estudio.
 
 El cambio productivo de una división en particular (y del sector industrial en general) entre el período t y t+1 puede determinarse a partir de la siguiente fórmula:
 
-FORMULA DEL INDICE
+\begin{center}
+\begin{equation}
+M P I_{o}\left(\mathbf{y}_{t}, \mathbf{x}_{t}, \mathbf{y}_{t+1}, \mathbf{x}_{t+1}\right)=\left[\frac{D_{o}^{t}\left(\mathbf{y}_{t+1}, \mathbf{x}_{t+1}\right)}{D_{o}^{t}\left(\mathbf{y}_{t}, \mathbf{x}_{t}\right)} \times \frac{D_{o}^{t+1}\left(\mathbf{y}_{t+1}, \mathbf{x}_{t+1}\right)}{D_{o}^{t+1}\left(\mathbf{y}_{t}, \mathbf{x}_{t}\right)}\right]^{0.5}
+\end{equation}
+\end{center}
 
 Adicionalmente, el MPI se descompone en cambios de eficiencia técnica (TEC), correspondiente al primer componente de la expresión que prosigue y cambio tecnológicos (TC), correspondiente al segundo componente.
 
-FORMULA DESCOMPOSICION
+\begin{center}
+\begin{equation}
+M P I_{o}\left(\mathbf{y}_{t}, \mathbf{x}_{t}, \mathbf{y}_{t+1}, \mathbf{x}_{t+1}\right)=\frac{D_{o}^{\mathrm{t}+1}\left(\mathbf{y}_{t+1}, \mathbf{x}_{t+1}\right)}{D_{o}^{\mathrm{t}}\left(\mathbf{y}_{t}, \mathbf{x}_{t}\right)} \times\left[\frac{D_{o}^{\mathrm{t}}\left(\mathbf{y}_{t+1}, \mathbf{x}_{t+1}\right)}{D_{o}^{\mathrm{t}+1}\left(\mathbf{y}_{t+1}, \mathbf{x}_{t+1}\right)} \times \frac{D_{o}^{\mathrm{t}}\left(\mathbf{y}_{t}, \mathbf{x}_{t}\right)}{D_{o}^{\mathrm{t}+1}\left(\mathbf{y}_{t}, \mathbf{x}_{t}\right)}\right]^{0.5}
+\end{equation}
+\end{center}
 
-Si el cambio de eficiencia es superior a la unidad, entonces hay un efecto de catching-up en el tiempo. Si el componente del cambio tecnológico es superior a uno, entonces estamos frente a un progreso tecnológico en el tiempo. Por su parte, Fare et at.(1994) plantea que a su vez, es posible descomponer los cambios de eficiencia en cambios de eficiencia de escala (SEC) y en cambios de eficiencia técnica pura (PETEC). Por lo tanto, el MPI orientado al output también puede expresarse a través de la siguiente ecuación:
+Si el cambio de eficiencia es superior a la unidad, entonces hay un efecto de catching-up en el tiempo. Si el componente del cambio tecnológico es superior a uno, entonces estamos frente a un progreso tecnológico en el tiempo. Por su parte, Fare et at.(1994) plantea que a su vez, es posible descomponer los cambios de eficiencia en cambios de eficiencia de escala (SEC) y en cambios de eficiencia técnica pura (PTEC). Por lo tanto, el MPI orientado al output también puede expresarse a través de la siguiente ecuación:
 
-FORMULA FINAL
+\begin{equation}
+\mathrm{MPI}= \mathrm{TC} \times\mathrm{PTEC} \times \mathrm{SEC}
+\end{equation}
 
-Para obtener el el índice orientado al output es necesario calcular 208 funciones de distancia [^2]. Estas funciones representan la eficiencia técnica, por lo que permiten comparar los requerimientos utilizados por las unidades ineficientes a partir de los productos e insumos utilizado por las unidades eficientes. 
+Para obtener el el índice orientado al output es necesario calcular 208 funciones de distancia [^2]. Estas funciones representan la eficiencia técnica, por lo que permiten comparar los requerimientos utilizados por las unidades ineficientes a partir de los productos e insumos utilizado por las unidades eficientes. Cuando la función de distancia es orientada al *input*, caracterizan una tecnología por la máxima contracción proporcional posible en el uso de los insumos, dado un nivel del producto constante. Mientras que cuando está orientado al *output* se considera la expansión proporcional máxima del vector de producción, dado los insumos utilizados. El MPI, a diferencia de los índices tradicionales, realiza de forma conjunta las asignaciones entre los dos períodos de los *inputs* y los *outputs*.
 
 [^2]: Esto es porque es necesario calcular cuatro funciones distancia por división, lo que resulta de 16 divisiones (K) por año (T=5). Al utilizar la fórmula K*(3T-2) el resultado que arroja es 208.
 
 Este enfoque supone convexidad de datos. Esta metodología además, cuenta con dos ventajas principales, en primer lugar no es necesario información de precios sino que utiliza datos de unidades físicas (cantidades) para los insumos y productos lo que permite comparar las diferentes actividades productivas dentro del sector industrial. En segundo lugar, no se utiliza el supuesto de maximización de beneficios o minimización de costos y el análisis no está atado a una forma funcional ni supuestos de especificación. Sin embargo, es muy sensible a outliers pudiendo generar ruido en las estimaciones, por dicho motivo es que estos no fueron consideraron para el análisis, tal como se mencionó en la sección anterior.
 
-Por su parte, de acuerdo a *Caves (1982)* el MPI no asume un tipo específico de retornos a escala. No obstante, en los estudios realizados por *Griffel - Tatj’e y Lovell (1995)* se prueba que bajo rendimientos que no son constantes a escala el MPI falla en identificar las mejoras en la productividad a través de la mejora en la eficiencia de escala y para algunas firmas. En este estudio utilizaremos retornos constantes a escala dado que al regresar el valor bruto de producción con el consumo intermedio, capital y trabajo, se desprende que no se rechaza la hipótesis nula de retornos constantes a escala. 
+Por su parte, de acuerdo a *Caves (1982)* el MPI no asume un tipo específico de retornos a escala. No obstante, en los estudios realizados por *Griffel - Tatj’e y Lovell (1995)* se prueba que bajo rendimientos que no son constantes a escala el MPI falla en identificar las mejoras en la productividad a través de la mejora en la eficiencia de escala y para algunas firmas. En este estudio se utiliza retornos constantes a escala dado que al regresar el valor bruto de producción con el consumo intermedio, capital y trabajo, se desprende que no se rechaza la hipótesis nula de retornos constantes a escala. 
 
 Para justificar el supuesto de rendimientos constantes a escala utilizado se realiza un modelo lineal MCO del *output* sobre los *inputs* y se testea la hipótesis nula de que la suma de los coeficientes es igual a la unidad.
 
@@ -175,19 +187,19 @@ Y luego realizamos el contraste de hipótesis:
 linearHypothesis(modelo, c("1*log(k) + 1*log(l) + 1*log(ci) = 1"))
 ```
 
-Como resultado de la prueba de hipótesis no se rechaza la hipótesis nula de rendimientos constantes a escala, por lo que trabajaremos con este supuesto, ello es habitual en la literatura de productividad industrial.
+Como resultado de la prueba de hipótesis no se rechaza la hipótesis nula de rendimientos constantes a escala, por lo que se procederá a trabajar con este supuesto, cabe destacar que ello es habitual en la literatura de productividad industrial.
 
 # Resultados
 
-Con la base ya depurada y las variables deflactadas realizamos el cálculo del Índice de Malmquist para las 16 divisiones incluídas. Como el índice mide la variación de la productividad entre dos períodos se indica como valor de índice para un año dado a la variación respecto al año anterior.
+Con la base ya depurada y las variables deflactadas se efectúa el cálculo del Índice de Malmquist para las 16 divisiones incluídas. Como el índice mide la variación de la productividad entre dos períodos se indica como valor de índice para un año dado a la variación respecto al año anterior.
 
-Comenzamos realizando el cálculo de todas las funciones de distancia involucradas. Estas funciones se calculan para cada período tomando como base el período anterior. También se calcula el índice punta a punta, es decir entre 2012 y 2016. En el siguiente gráfico se muestran la frontera de eficiencia para el primer y el último año  considerados:
+En primer lugar se realizá el cálculo de todas las funciones de distancia involucradas. Estas funciones se calculan para cada período tomando como base el período anterior. También se calcula el índice punta a punta, es decir entre 2012 y 2016. En el *Gráfico 3* se señala la frontera de eficiencia para el primer y el último año  considerados:
 
 ```{r}
 source('src/graficos.R', encoding = 'UTF-8')
 ```
 
-Una vez calculadas las funciones de distancia, utilizando el inverso de las mismas se obtiene el MPI. En la siguiente tabla se muestra la variación del índice para cada año según la división considerada. En la última columna se muestra la variación punta a punta. La última fila muestra el resultado de toda la industria, es decir agrupando todos los valores en valores constantes.
+En segundo lugar, se calcula el inverso de las funciones distancias para obtener el MPI. En la tabla que se presenta a continuación se detalla la variación del índice para cada año según la división considerada, mientras que en la última columna se presenta la variación punta a punta. La última fila muestra el resultado de toda la industria, es decir agrupando todos los valores en valores constantes.
 
 ```{r}
 mpi_tfpc %>% 
@@ -197,7 +209,9 @@ mpi_tfpc %>%
   column_spec(6, border_left = T, bold = T) 
 ```
 
-El índice agregado arroja que en promedio hubo una ganancia de 2,02\% en productividad, concentrada en los años 2013 y 2014, ya que en los años 2015 y 2016 se ven caídas en el MPI. Los resultados muestran que 11 de las 16 divisiones tuvieron ganancias de productividad en promedio entre los años 2012 y 2016. Los sectores con mayores ganancias de productividad en el período analizado son: *14 - Fabricación de prendas de vestir* y *33 - Reparación e instalación de maquinaria y equipo*.  Por otro lado los sectores de peor desempeño son:  *31 - Fabricación de muebles* y *28 - Fabricación de maquinaria y equipo*. La siguiente gráfica muestra la evolución del MPI para estas divisiones:
+El índice agregado arroja que en promedio hubo una ganancia de 2,02\% en productividad, concentrada en los años 2013 y 2014, ya que entre 2015 y 2016 se observan caídas en el MPI. Los resultados muestran que 11 de las 16 divisiones tuvieron ganancias de productividad en promedio entre los años 2012 y 2016. 
+
+Por su parte, si se efectúa el análisis a nivel de las divisiones específicas se identifica que los sectores con mayores ganancias de productividad en el período analizado son: *14 - Fabricación de prendas de vestir* y *33 - Reparación e instalación de maquinaria y equipo*.  Mientras que los sectores que eidenciaron un peor desempeño son:  *31 - Fabricación de muebles* y *28 - Fabricación de maquinaria y equipo*. La gráfica que sigue detalla la evolución del MPI para estas divisiones:
 
 ```{r}
 mpi_tfpc %>% 
@@ -214,7 +228,7 @@ mpi_tfpc %>%
 
 ## Descomposición del Índice
 
-Como se indicó en el apartado metodológico el MPI puede ser descompuesto en cambios en la eficiencia (TEC) y cambio técnico (TC). Aplicamos esta descomposición para la viariación punta a punta y obtenemos el TEC y el TC. Adicionalmente se descomponen el cambio en eficiencia en cambio de eficiencia de escala (SEC) y  cambio técnico puro (PTEC). Se incluye en la última fila el promedio simple de todas las divisiones.  
+Como se indicó en el apartado metodológico el MPI puede ser descompuesto en cambios en la eficiencia (TEC) y cambio técnico (TC). Cuando se aplica esta descomposición para la variación punta a punta se obtiene el TEC y el TC. Adicionalmente el cambio en eficiencia se descompone en cambio de eficiencia de escala (SEC) y  cambio técnico puro (PTEC). Se incluye en la última fila el promedio simple de todas las divisiones.  
 
 En la siguiente tabla se muestran los resultados de la descomposición:
 
@@ -225,21 +239,21 @@ tabla_tc %>%
   row_spec(17, bold = T)
 ```
 
-La descomposición nos permite observar que la ganancia de productividad promedio de 2,02\%
+De dicha descomposición se desprende que la ganancia de productividad promedio de 2,02\%
 se puede descomponer en un una ganancia de 5,29\% cambio técnico y una pérdida de 3,15\% de cambio en la eficiencia técnica. Es decir que los aumentos de productividad vienen dados por mejoras promedio en la tecnología de producción y no en la eficiencia.
 
-Cuando analizamos las divisiones de mejor desempeño vemos que la ganancia en productividad se explica por ganancias de similar magnitud en TEC y TC para la división *14 - Fabricación de prendas de vestir*. En el caso de *33 - Reparación e instalación de maquinaria y equipo* vemos que el aumento de la TFPC viene de la mano de un fuerte aumento en el cambio técnico.
+Por su parte, cuando se analizan las divisiones de mejor desempeño se observa que la ganancia en productividad se explica por ganancias de similar magnitud en TEC y TC para la división *14 - Fabricación de prendas de vestir*. Mientras que en el caso de *33 - Reparación e instalación de maquinaria y equipo* vemos que el aumento de la TFPC viene de la mano de un fuerte aumento en el cambio técnico.
 
 
 # Conclusiones
 
-En este trabajo pudimos obtener mediciones de la productividad total de los factores para el sector industrial para el período 2012-2016. Encontramos que existieron ganancias de productividad en promedio para todos los años salvo para el 2015, pero con un desempeño sectorial heterogéneo, habiendo sectores con ganancias netas de productividad así como otros con pérdidas.
+En este trabajo fue posible obtener mediciones de la productividad total de los factores para el sector industrial uruguayo para el período 2012-2016. De allí se desprende que, en promedio, existieron ganancias de productividad para todos los años exeptuando el 2015. Asimismo, fue posible apreciar un desempeño sectorial heterogéneo, lo que se explic apor sectores con ganancias netas de productividad así como otros con pérdidas.
 
 La adopción metodológica del índice de Malmquist representa una innovación en la literatura existente ya que solamente se había utilizado métodos paramétricos para la estimación de la productividad industrial en Uruguay. Los resultados arrojan una tasa de crecimiento de la productividad promedio de 2,02\% para el período estudiado, lo cual es un resultado dentro del margen de lo esperado.
 
 A su vez la aplicación del MPI permitió descomponer el crecimiento de la productividad en cambio tecnológico y ganancias en la eficiencia, obteniendo que las ganancias de productividad son resultado de cambio técnico.
 
-Por último encontramos que este trabajo pordía verse enriquecido trabajando con los microdatos de la EAAE, los cuales no pudimos obtener, ya que aportaría mayor riqueza al análisis de eficiencia. Otra alternativa también sería explorar la adopción de una frontera de eficiencia estocástica o una *metafrontera*.
+Por último este trabajo podría verse enriquecido mediante la utilización de los microdatos de la EAAE, a los cuales no fue posible acceder, ya que aportaría mayor riqueza al análisis de eficiencia. Otra alternativa sería explorar la adopción de una frontera de eficiencia estocástica o una *metafrontera*.
 
 # Referencias nibliográficas
 
@@ -254,6 +268,8 @@ Por último encontramos que este trabajo pordía verse enriquecido trabajando co
 + [5] Martínez-Damián, M.; Brambila-Paz, J. y García-Mata, R. (2013) “Índice de malmquist y productividad estatal en México”. Agricultura, sociedad y desarrollo, 10(3), 359-369. 
 
 + [6] Presto, G. (2016) “Efectos de la productividad y rentabilidad en el desempeño y supervivencia de las empresas manufactureras uruguayas”. Facultad de Ciencias Sociales, UdelaR.
+
++ [7] Sicilia, G. (2019). Notas docentes, Facultad de Ciencias Económicas y Administración, UdelaR.
 
 
 # Anexo

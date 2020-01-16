@@ -1,6 +1,6 @@
-library(tidyverse)
-library(here)
-library(readxl)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 library(ggthemes)
 library(skimr)
 library(car)
@@ -37,35 +37,6 @@ matriz_correlaciones <- df_eaae %>%
 
 row.names(matriz_correlaciones) <- c("vbp", "ci", "ckf", "rem")
 
-# write_xlsx(matriz_correlaciones, "data/tablas/matriz_correlaciones.xlsx")
-
-# Scatterplot variables en niveles
-# grafico_scatter_niveles <- df_deflactado %>% 
-#   ggplot(aes(x=x, y=y, color=division)) +
-#   geom_point() +
-#   labs(y="VBP", x='Suma de los Inputs') + 
-#   ggtitle('Scatterplot de Output e Inputs según división, en niveles') +
-#   theme_bw()
-
-
-# Df con inputs en logs
-df_log <- df_deflactado %>% 
-  rowwise() %>% 
-  mutate(y  = log(y),
-         x  = log(sum(ci, k, l)),
-         k  = log(k),
-         l  = log(l),
-         ci = log(ci)) %>% 
-  filter(!division %in% c('10', '19', '20', '17', '26', '11 y 12')) 
-
-# # Grafico
-# df_log %>%
-#   ggplot(aes(x=x, y=y, color=division)) +
-#   geom_point() +
-#   labs(y="Log del VBP", x='Log de los Inputs') +
-#   ggtitle('Scatterplot de Output e Inputs según división') +
-#   theme_bw()
-
 # Estadísticos descriptivos
 tabla_estadisticos <- df_filtrado %>% 
   select(y, k , l, ci) %>% 
@@ -81,7 +52,7 @@ tabla_estadisticos <- df_filtrado %>%
             p100 = numeric.p100)
 
 # Corre script estimaciones
-source('src/estimacion.R', encoding = 'UTF-8')
+source('src/4. estimacion.R', encoding = 'UTF-8')
 
 # Test de significacion conjunta
 modelo <- lm(log(y) ~ log(k) + log(l) + log(ci), data = df_filtrado)
