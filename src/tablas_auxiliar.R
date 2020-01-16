@@ -92,7 +92,13 @@ mpi_tfpc <- df_filtrado %>%
   select(division) %>% 
   distinct() %>% 
   rbind('Promedio') %>% 
-  bind_cols(tfpc_div)
+  bind_cols(tfpc_div) %>% 
+  transmute (Division = division,
+             `2013`   = tfpc_2013,
+             `2014`   = tfpc_2014,
+             `2015`   = tfpc_2015,
+             `2016`   = tfpc_2016,
+             Punta    = tfpc_punta)
 
 # Tabla TFPC
 tabla_tc <- df_filtrado %>% 
@@ -100,7 +106,7 @@ tabla_tc <- df_filtrado %>%
   distinct() %>% 
   rbind('Promedio') %>% 
   bind_cols(matriz_tc) %>% 
-  transmute(division,
+  transmute(Division = division,
             TFPC = `V1`,
             TC = `V2`,
             TEC = `V3`,

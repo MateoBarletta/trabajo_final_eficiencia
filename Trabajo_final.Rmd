@@ -27,43 +27,43 @@ library(Benchmarking)
 source('src/tablas_auxiliar.R')
 ```
 
+\renewcommand{\figurename}{Gráfico}
+\renewcommand{\tablename}{Tabla}
 
 # Introducción
 
-En este trabajo nos proponemos realizar una primera aproximación a la productividad del sector industrial de Uruguay a partir de los datos de la Encuesta Anual de Actividad Económica (EAAE) realizada por el Instituto de Estadística del Uruguay (INE). En particular este estudio permitirá identificar cuáles sectores industriales mostraron un mejor comportamiento productivo.  
+En este trabajo nos proponemos realizar una primera aproximación a la productividad del sector industrial de Uruguay a partir de los datos de la Encuesta Anual de Actividad Económica (EAAE) realizada por el Instituto Nacional de Estadística (INE). En particular este estudio permitirá identificar cuales sectores industriales mostraron un mejor comportamiento productivo.  
 
 La productividad total de los factores es un tema con escasa investigación en la agenda de Uruguay pero que ocupa un rol central en la agenda de crecimiento. La poca disponibilidad de datos, así como el alto rezago en la publicación de los mismos hace de esta temática un tema poco abordado por la academia nacional. Adicionalmente la gran mayoría de los trabajos existentes se basan en técnicas de contabilidad del crecimiento.  
 
 El sector industrial representa un interesante objeto de estudio por la heterogeneidad que lo compone. La metodología nos permite realizar distintas agrupaciones, por código CIIU, por tamaño de empresa entre otras. Los datos se publican para 22 divisiones distintas lo que da versatilidad. Debido a la disponibilidad de datos el sector industrial es el más estudiado en los trabajos de productividad, por lo que existe una literatura de referencia.  
 
-Para llevar a cabo el estudio se aplicará la metodología del Índice de Malmquist para el sector industrial uruguayo. Así como también se descompondrá la variación del índice en ganancia de eficiencia (SEC) y cambio tecnológico puro (PTEC).  
+Para llevar a cabo el estudio se aplicará la metodología del Índice de Malmquist para el sector industrial uruguayo. Así como también se descompondrá la variación del cambio tecnológico (TC) y cambios en la eficiencia técnica (TEC).  
 
-Existen dos caminos para el cálculo de la productividad. Una primera alternativa y la más utilizada es utilizar las técnicas de contabilidad de crecimiento. Estas técnicas permiten descomponer el crecimiento del producto según el crecimiento de los inputs y así obtener el residuo de Solow - en honor al investigador Robert Solow - también interpretado como cambio tecnológico o cambios en la productividad. Este método ampliamente utilizado en las últimas décadas (el trabajo pionero de Solow es de 1957) necesita asumir una función de producción del tipo paramétrico por lo que es necesario conocer los valores fijos de los parámetros.  
+Existen dos caminos para el cálculo de la productividad. Una primera alternativa y la más utilizada es utilizar las técnicas de contabilidad de crecimiento. Estas técnicas permiten descomponer el crecimiento del producto según el crecimiento de los *inputs* y así obtener el residuo de Solow - en honor al investigador Robert Solow - también interpretado como cambio tecnológico o cambios en la productividad. Este método ampliamente utilizado en las últimas décadas (el trabajo pionero de Solow es de 1957) necesita asumir una función de producción del tipo paramétrico por lo que es necesario conocer los valores fijos de los parámetros.  
 
-Abordaremos la medición de la productividad mediante otro tipo de metodología, este es un enfoque  semi-paramétrico y que utiliza métodos de frontera. 
+Abordaremos la medición de la productividad mediante otro tipo de metodología, este es un enfoque  semi-paramétrico utilizando métodos de frontera. 
 
 
 # Antecedentes
 
 A nivel global el sector industrial ha sido uno de los impulsores de crecimiento y desarrollo económico. No obstante, si bien en Uruguay se intentó incorporar un modelo que impulse la industria del país, el modelo de industrialización por sustitución de importaciones (ISI), debido a la dimensión del tamaño interno y la importancia del sector agroexportador, este proceso se extinguió y no fue sostenible en el tiempo.  
 
-A pesar de lo anterior, en Uruguay es uno de los rubros  generadores de empleo más importantes por lo cual se torna relevante estudiar su desempeño. Adicionalmente si se considera a la industria uno de los portadores de cambio técnico resulta relevante analizar cómo se ha comportado en los últimos años.  
+A pesar de lo anterior la industria en Uruguay es uno de los rubros  generadores de empleo más importantes por lo cual se torna relevante estudiar su desempeño. Adicionalmente si se considera a la industria uno de los portadores de cambio técnico resulta relevante analizar cómo se ha comportado en los últimos años.  
 
-El objetivo de este estudio es brindar una aproximación sobre el desempeño productivo del sector industrial en Uruguay para el periodo 2012-2016 desde una perspectiva de eficiencia económica.  
+El objetivo de este estudio es brindar una aproximación sobre el desempeño productivo del sector industrial en Uruguay para el periodo 2012-2016 desde una perspectiva de eficiencia económica. Por esto resulta importante relevar la literatura que estudia la productividad de la industria en Uruguay.   
 
-En este sentido, resulta importante relevar la literatura que estudia la productividad de la industria en Uruguay.   
+La medición de la productividad no es directa ya que es posible que una unidad productiva utilice distintas combinaciones de insumos en el tiempo que difieran con otras unidades productivas. Existen diversos trabajos cuyo objetivo es estudiar la productividad del sector industrial en Uruguay. 
 
-La medición de la productividad no es directa ya que es posible que una unidad productiva utilice distintas combinaciones de insumos en el tiempo que difieran con otras unidades productivas. Existen diversos estudios cuyo objetivo es estudiar la productividad del sector industrial en Uruguay. 
+En este sentido, *Casacuberta y Gandelman (2015)* estudian el desempeño productivo de varios sectores económicos de Uruguay, específicamente su objetivo es identificar cual fue el efecto de la crisis financiera que experimentó el país en el año 2002 sobre la productividad total de los factores (*tfp*) de las distintas actividades económicas del país. Para ello, utilizan datos proporcionados por la Encuesta Anual de Actividad Económica del INE para el período 1997-2005 y combinan el uso de dos metodologías, por un lado, la estimación de productividad siguiendo la metodología de *Levinsohn y Petrin (2003)*, y por otro lado computaron la productividad total de los factores de *Hsieh and Klenow (2009)*. De su análisis concluyen que el cierre de las firmas está asociado con niveles menores de productividad. En particular, el sector industrial del país evidenció en promedio un detrimento de su productividad en los años estudiados.
 
-En este sentido, *Casacuberta y Gandelman (2015)* estudian el desempeño productivo de varios sectores económicos de Uruguay, específicamente su objetivo es identificar cuál fue el efecto de la crisis financiera que experimentó el país en el 2002 sobre la productividad total de los factores (*tfp*) de las distintas actividades económicas del país. Para ello, utilizan datos proporcionados por la Encuesta Anual de Actividad Económica del INE para el período 1997-2005 y combinan el uso de dos metodologías,  por un lado, la estimación de productividad siguiendo la metodología de *Levinsohn y Petrin (2003)*, y por otro lado computaron la productividad total de los factores de *Hsieh and Klenow (2009)*. De su análisis concluyen que el cierre de las firmas está asociado con niveles menores de productividad. En particular, el sector industrial del país evidenció en promedio un detrimento de su productividad en los años estudiados.
+En otro trabajo, *Carracelas, Casacuberta y Vaillant (2009)* en su estudio sobre el desempeño sectorial discuten las posibles causantes de la evidencia contradictoria en los estudios de la productividad total de los factores en Uruguay. Adicionalmente analizan el desempeño productivo de los diversos sectores de la economía del país. Este estudio utiliza diversas fuentes de datos tales como Banco Central del Uruguay (BCU), INE y el Instituto de Economía (IECON) a partir del método de números índices de Törnqvist para el período 1991-2007. En particular, encuentran ganancias de productividad en promedio para el sector industrial en los años bajo estudio, resultados opuestos a los encontrados por *Casacuberta y Gandelman (2015)*.
 
-En otro trabajo, *Carracelas, Casacuberta y Vaillant (2009)* en su estudio sobre el desempeño sectorial heterogéneo se discuten las posibles causantes de la evidencia contradictoria en los estudios de la productividad total de los factores en Uruguay, adicionalmente, analizan el desempeño productivo de los diversos sectores de la economía del país. Este estudio utiliza diversas fuentes de datos tales como Banco Central del Uruguay (BCU), INE y el Instituto de Economía (IECON) a partir del método de números índices de Törnqvist para el período 1991-2007. En particular, encuentran ganancias de productividad en promedio para el sector industrial en los años bajo estudio, resultados opuestos a los encontrados por *Casacuberta y Gandelman (2015)*.
-
-De lo anterior se desprende que no se ha encontrado evidencia empírica concluyente respecto al desempeño productivo del sector industrial en Uruguay. Como resultado, resulta interesante analizar cuáles son los efectos encontrados en la productividad de este rubro utilizando un método diferente como es el Índice de Productividad de Malmquist (MPI).
+De lo anterior se desprende que no se ha encontrado evidencia empírica concluyente respecto al desempeño productivo del sector industrial en Uruguay. Por esto es interesante analizar cuáles son los efectos encontrados en la productividad de este rubro utilizando un método diferente como es el Índice de Productividad de Malmquist (MPI).
 
 # Datos y selección de variables
 
-Los datos utilizados en este trabajo son extraídos de la Encuesta Anual de Actividad Económica (EAAE) realizada por el Instituto Nacional de Estadística de Uruguay (INE) [^1]. Se cuenta con información entre 2008 y 2016, aunque a los efectos de este análisis se utilizarán aquellos a partir del 2012 debido a que se observan algunos inconvenientes en la base de datos en el año 2011. 
+Los datos utilizados en este trabajo son extraídos de la Encuesta Anual de Actividad Económica (EAAE) realizada por el INE[^1]. Se cuenta con información entre 2008 y 2016, aunque a los efectos de este análisis se utilizarán aquellos a partir del 2012 debido a que se observan algunos inconvenientes en la base de datos en el año 2011. 
 
 [^1]: [http://www.ine.gub.uy/web/guest/industria-comercio-y-servicios](http://www.ine.gub.uy/web/guest/industria-comercio-y-servicios)
 
@@ -77,7 +77,7 @@ Como se puede ver en la siguiente tabla, todas las variables se encuentran ampli
 
 ```{r}
 matriz_correlaciones %>% 
-  kable(booktabs = T, caption = "Matriz de correlaciones de Output e Inputs") %>% 
+  kable(booktabs = T, caption = "Matriz de correlaciones") %>% 
   kable_styling(latex_options =c("HOLD_position", "striped"))
 ```
 
@@ -97,7 +97,7 @@ df_deflactado %>%
   ggplot(aes(x=x, y=y, color=division)) +
   geom_point() +
   labs(y="VBP", x='Suma de los Inputs') + 
-  ggtitle('Scatterplot de Output e Inputs según división') +
+  ggtitle('Gráfico 1: Scatterplot de Output e Inputs según división') +
   theme_bw()
 ```
 
@@ -116,7 +116,7 @@ df_filtrado %>%
   ggplot(aes(x=x, y=y, color=division)) +
   geom_point() +
   labs(y="VBP", x='Suma de los Inputs') + 
-  ggtitle('Scatterplot de Output e Inputs según división') +
+  ggtitle('Gráfico 2: Scatterplot de Output e Inputs según división') +
   theme_bw()
 ```
 
@@ -124,7 +124,8 @@ En la siguiente tabla se presentan los estadísticos descriptivos de las variabl
 
 ```{r}
 tabla_estadisticos %>% 
-  kable(booktabs = T, caption = "Principales estadísticos descriptivos") %>% 
+  kable(booktabs = T, format.args = list(big.mark = "."),
+        caption = "Principales estadísticos descriptivos") %>% 
   kable_styling(latex_options =c("HOLD_position", "striped"))
 ```
 
@@ -164,7 +165,8 @@ Para justificar el supuesto de rendimientos constantes a escala utilizado se rea
 Primero estimamos el modelo en logaritmos:
 
 ```{r}
-(modelo <- lm(log(y) ~ log(k) + log(l) + log(ci), data = df_filtrado))
+modelo <- lm(log(y) ~ log(k) + log(l) + log(ci), data = df_filtrado)
+modelo
 ```
 
 Y luego realizamos el contraste de hipótesis:
@@ -190,34 +192,37 @@ Una vez calculadas las funciones de distancia, utilizando el inverso de las mism
 ```{r}
 mpi_tfpc %>% 
   kable(booktabs = T, caption = "Evolución del Índice de Malmquist, según año y división") %>% 
-  kable_styling(latex_options =c("HOLD_position", "striped"))
+  kable_styling(latex_options =c("HOLD_position", "striped")) %>% 
+  row_spec(17, bold = T) %>% 
+  column_spec(6, border_left = T, bold = T) 
 ```
 
 El índice agregado arroja que en promedio hubo una ganancia de 2,02\% en productividad, concentrada en los años 2013 y 2014, ya que en los años 2015 y 2016 se ven caídas en el MPI. Los resultados muestran que 11 de las 16 divisiones tuvieron ganancias de productividad en promedio entre los años 2012 y 2016. Los sectores con mayores ganancias de productividad en el período analizado son: *14 - Fabricación de prendas de vestir* y *33 - Reparación e instalación de maquinaria y equipo*.  Por otro lado los sectores de peor desempeño son:  *31 - Fabricación de muebles* y *28 - Fabricación de maquinaria y equipo*. La siguiente gráfica muestra la evolución del MPI para estas divisiones:
 
 ```{r}
 mpi_tfpc %>% 
-  select(-tfpc_punta) %>% 
-  filter(division %in% c('14', '33', '31', '28')) %>% 
-  pivot_longer(values_to = 'MPI', names_to = 'Año', names_prefix="tfpc_", -division) %>% 
-  ggplot(aes(x = Año, y = MPI, color = division)) +
+  select(-Punta) %>% 
+  filter(Division %in% c('14', '33', '31', '28')) %>% 
+  pivot_longer(values_to = 'MPI', names_to = 'Año', -Division) %>% 
+  ggplot(aes(x = Año, y = MPI, color = Division)) +
   geom_point() +
-  geom_line(aes(group = division)) +
-  ggtitle("Evolución de la divisiones con mejor y peor desempeño") +
+  geom_line(aes(group = Division)) +
+  ggtitle("Gráfico 4: Evolución de la divisiones con mejor y peor desempeño") +
   labs(color = 'División') +
   theme_bw()
 ```
 
 ## Descomposición del Índice
 
-Como se indico en el apartado metodológico el MPI puede ser descompuesto en cambios en la eficiencia (TEC) y cambio técnico (TC). Aplicamos esta descomposición para la viariación punta a punta y obtenemos el TEC y el TC. Adicionalmente se descomponen el cambio en eficiencia en cambio de eficiencia de escala (SEC) y  cambio técnico puro (PTEC). Se incluye en la última fila el promedio simple de todas las divisiones.  
+Como se indicó en el apartado metodológico el MPI puede ser descompuesto en cambios en la eficiencia (TEC) y cambio técnico (TC). Aplicamos esta descomposición para la viariación punta a punta y obtenemos el TEC y el TC. Adicionalmente se descomponen el cambio en eficiencia en cambio de eficiencia de escala (SEC) y  cambio técnico puro (PTEC). Se incluye en la última fila el promedio simple de todas las divisiones.  
 
 En la siguiente tabla se muestran los resultados de la descomposición:
 
 ```{r}
 tabla_tc %>% 
   kable(booktabs = T, caption = "Descomposición del cambio técnico según división") %>% 
-  kable_styling(latex_options =c("HOLD_position", "striped"))
+  kable_styling(latex_options =c("HOLD_position", "striped")) %>% 
+  row_spec(17, bold = T)
 ```
 
 La descomposición nos permite observar que la ganancia de productividad promedio de 2,02\%
@@ -227,6 +232,29 @@ Cuando analizamos las divisiones de mejor desempeño vemos que la ganancia en pr
 
 
 # Conclusiones
+
+En este trabajo pudimos obtener mediciones de la productividad total de los factores para el sector industrial para el período 2012-2016. Encontramos que existieron ganancias de productividad en promedio para todos los años salvo para el 2015, pero con un desempeño sectorial heterogéneo, habiendo sectores con ganancias netas de productividad así como otros con pérdidas.
+
+La adopción metodológica del índice de Malmquist representa una innovación en la literatura existente ya que solamente se había utilizado métodos paramétricos para la estimación de la productividad industrial en Uruguay. Los resultados arrojan una tasa de crecimiento de la productividad promedio de 2,02\% para el período estudiado, lo cual es un resultado dentro del margen de lo esperado.
+
+A su vez la aplicación del MPI permitió descomponer el crecimiento de la productividad en cambio tecnológico y ganancias en la eficiencia, obteniendo que las ganancias de productividad son resultado de cambio técnico.
+
+Por último encontramos que este trabajo pordía verse enriquecido trabajando con los microdatos de la EAAE, los cuales no pudimos obtener, ya que aportaría mayor riqueza al análisis de eficiencia. Otra alternativa también sería explorar la adopción de una frontera de eficiencia estocástica o una *metafrontera*.
+
+# Referencias nibliográficas
+
++ [1] Casacuberta, C.; Gandelman N. (2015) “Productivity, exit and crisis in Uruguayan manufacturing and services sectors”. Developing Economies, Vol. 53(1), pp 27-43.
+
++ [2] Carracelas, G.; Casacuberta C. y Vaillant, M. (2009) “Productividad total de factores: desempeño sectorial heterogéneo”. Facultad de Ciencias Sociales, UdelaR.
+
++ [3] Eslava, M.; Hurtado, B.; Salas, N., et al. (2018) “Microdatos para el estudio de la productividad en América Latina”. Banco de Desarrollo para América Latina (CAF).
+
++ [4] Lara, M. (2011) “Desempeño de productividad sectoriales de la industria manufacturera uruguaya (1970-2000) en una perspectiva comparada”. Facultad de Ciencias Sociales, UdelaR.
+
++ [5] Martínez-Damián, M.; Brambila-Paz, J. y García-Mata, R. (2013) “Índice de malmquist y productividad estatal en México”. Agricultura, sociedad y desarrollo, 10(3), 359-369. 
+
++ [6] Presto, G. (2016) “Efectos de la productividad y rentabilidad en el desempeño y supervivencia de las empresas manufactureras uruguayas”. Facultad de Ciencias Sociales, UdelaR.
+
 
 # Anexo
 

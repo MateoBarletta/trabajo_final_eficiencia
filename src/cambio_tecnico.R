@@ -24,20 +24,17 @@ eff40 <- cbind(1/d40$eff)
 eff04 <- cbind(1/d04$eff)
 eff44 <- cbind(1/d44$eff)
 
-# Technical efficiency change
+# Cambio en la eficiencia
 # TEC  = PECH x SEC
 # TFPC = TEC x TC
-
 tec <- cbind(eff44/eff00)
 
-# Technical change
+# Cambio tecnico
 tc <- cbind((eff04/eff44 * eff00/eff40)^0.5)
-tc
-# Cambio tecnico neutral, es el mismo para todas las unidades
 
 # Pure and scale efficiency decomposition
-d00v = dea(x0 ,y0, RTS="vrs", ORIENTATION="out");
-d44v = dea(x4, y4, RTS="vrs", ORIENTATION="out") 
+d00v   <-  dea(x0 ,y0, RTS="vrs", ORIENTATION="out");
+d44v   <-  dea(x4, y4, RTS="vrs", ORIENTATION="out") 
 eff00v <- cbind(1/d00v$eff)
 eff44v <- cbind(1/d44v$eff)
 pech <- cbind(eff44v/eff00v)

@@ -1,0 +1,718 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Análisis de la productividad industrial en Uruguay},
+  pdfauthor={Mateo Barletta - Eugenia Leira},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Blue,
+  urlcolor=blue,
+  breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-2}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+
+\title{Análisis de la productividad industrial en Uruguay}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Métodos para la Medición de la Eficiencia y la Productividad}
+\author{Mateo Barletta - Eugenia Leira}
+\date{15/01/2020}
+
+\begin{document}
+\maketitle
+
+\renewcommand{\figurename}{Gráfico}
+\renewcommand{\tablename}{Tabla}
+
+\hypertarget{introducciuxf3n}{%
+\section{Introducción}\label{introducciuxf3n}}
+
+En este trabajo nos proponemos realizar una primera aproximación a la
+productividad del sector industrial de Uruguay a partir de los datos de
+la Encuesta Anual de Actividad Económica (EAAE) realizada por el
+Instituto Nacional de Estadística (INE). En particular este estudio
+permitirá identificar cuales sectores industriales mostraron un mejor
+comportamiento productivo.
+
+La productividad total de los factores es un tema con escasa
+investigación en la agenda de Uruguay pero que ocupa un rol central en
+la agenda de crecimiento. La poca disponibilidad de datos, así como el
+alto rezago en la publicación de los mismos hace de esta temática un
+tema poco abordado por la academia nacional. Adicionalmente la gran
+mayoría de los trabajos existentes se basan en técnicas de contabilidad
+del crecimiento.
+
+El sector industrial representa un interesante objeto de estudio por la
+heterogeneidad que lo compone. La metodología nos permite realizar
+distintas agrupaciones, por código CIIU, por tamaño de empresa entre
+otras. Los datos se publican para 22 divisiones distintas lo que da
+versatilidad. Debido a la disponibilidad de datos el sector industrial
+es el más estudiado en los trabajos de productividad, por lo que existe
+una literatura de referencia.
+
+Para llevar a cabo el estudio se aplicará la metodología del Índice de
+Malmquist para el sector industrial uruguayo. Así como también se
+descompondrá la variación del cambio tecnológico (TC) y cambios en la
+eficiencia técnica (TEC).
+
+Existen dos caminos para el cálculo de la productividad. Una primera
+alternativa y la más utilizada es utilizar las técnicas de contabilidad
+de crecimiento. Estas técnicas permiten descomponer el crecimiento del
+producto según el crecimiento de los \emph{inputs} y así obtener el
+residuo de Solow - en honor al investigador Robert Solow - también
+interpretado como cambio tecnológico o cambios en la productividad. Este
+método ampliamente utilizado en las últimas décadas (el trabajo pionero
+de Solow es de 1957) necesita asumir una función de producción del tipo
+paramétrico por lo que es necesario conocer los valores fijos de los
+parámetros.
+
+Abordaremos la medición de la productividad mediante otro tipo de
+metodología, este es un enfoque semi-paramétrico utilizando métodos de
+frontera.
+
+\hypertarget{antecedentes}{%
+\section{Antecedentes}\label{antecedentes}}
+
+A nivel global el sector industrial ha sido uno de los impulsores de
+crecimiento y desarrollo económico. No obstante, si bien en Uruguay se
+intentó incorporar un modelo que impulse la industria del país, el
+modelo de industrialización por sustitución de importaciones (ISI),
+debido a la dimensión del tamaño interno y la importancia del sector
+agroexportador, este proceso se extinguió y no fue sostenible en el
+tiempo.
+
+A pesar de lo anterior la industria en Uruguay es uno de los rubros
+generadores de empleo más importantes por lo cual se torna relevante
+estudiar su desempeño. Adicionalmente si se considera a la industria uno
+de los portadores de cambio técnico resulta relevante analizar cómo se
+ha comportado en los últimos años.
+
+El objetivo de este estudio es brindar una aproximación sobre el
+desempeño productivo del sector industrial en Uruguay para el periodo
+2012-2016 desde una perspectiva de eficiencia económica. Por esto
+resulta importante relevar la literatura que estudia la productividad de
+la industria en Uruguay.
+
+La medición de la productividad no es directa ya que es posible que una
+unidad productiva utilice distintas combinaciones de insumos en el
+tiempo que difieran con otras unidades productivas. Existen diversos
+trabajos cuyo objetivo es estudiar la productividad del sector
+industrial en Uruguay.
+
+En este sentido, \emph{Casacuberta y Gandelman (2015)} estudian el
+desempeño productivo de varios sectores económicos de Uruguay,
+específicamente su objetivo es identificar cual fue el efecto de la
+crisis financiera que experimentó el país en el año 2002 sobre la
+productividad total de los factores (\emph{tfp}) de las distintas
+actividades económicas del país. Para ello, utilizan datos
+proporcionados por la Encuesta Anual de Actividad Económica del INE para
+el período 1997-2005 y combinan el uso de dos metodologías, por un lado,
+la estimación de productividad siguiendo la metodología de
+\emph{Levinsohn y Petrin (2003)}, y por otro lado computaron la
+productividad total de los factores de \emph{Hsieh and Klenow (2009)}.
+De su análisis concluyen que el cierre de las firmas está asociado con
+niveles menores de productividad. En particular, el sector industrial
+del país evidenció en promedio un detrimento de su productividad en los
+años estudiados.
+
+En otro trabajo, \emph{Carracelas, Casacuberta y Vaillant (2009)} en su
+estudio sobre el desempeño sectorial discuten las posibles causantes de
+la evidencia contradictoria en los estudios de la productividad total de
+los factores en Uruguay. Adicionalmente analizan el desempeño productivo
+de los diversos sectores de la economía del país. Este estudio utiliza
+diversas fuentes de datos tales como Banco Central del Uruguay (BCU),
+INE y el Instituto de Economía (IECON) a partir del método de números
+índices de Törnqvist para el período 1991-2007. En particular,
+encuentran ganancias de productividad en promedio para el sector
+industrial en los años bajo estudio, resultados opuestos a los
+encontrados por \emph{Casacuberta y Gandelman (2015)}.
+
+De lo anterior se desprende que no se ha encontrado evidencia empírica
+concluyente respecto al desempeño productivo del sector industrial en
+Uruguay. Por esto es interesante analizar cuáles son los efectos
+encontrados en la productividad de este rubro utilizando un método
+diferente como es el Índice de Productividad de Malmquist (MPI).
+
+\hypertarget{datos-y-selecciuxf3n-de-variables}{%
+\section{Datos y selección de
+variables}\label{datos-y-selecciuxf3n-de-variables}}
+
+Los datos utilizados en este trabajo son extraídos de la Encuesta Anual
+de Actividad Económica (EAAE) realizada por el INE\footnote{\url{http://www.ine.gub.uy/web/guest/industria-comercio-y-servicios}}.
+Se cuenta con información entre 2008 y 2016, aunque a los efectos de
+este análisis se utilizarán aquellos a partir del 2012 debido a que se
+observan algunos inconvenientes en la base de datos en el año 2011.
+
+La EAAE se desagrega a nivel de CIIU, lo que permite realizar el
+análisis para los diferentes rubros de la actividad industrial, esto
+significa que los datos se publican para 22 divisiones distintas lo que
+da una amplica cobertura al estudio. En el Anexo se incluye una
+descripción de todas las divisiones consideradas.
+
+Para obtener una base de datos que nos permita efectuar el estudio se
+deberá depurar la base para quitar outliers y deflactar las variables
+por un índice de precios agregado para obtener valores constantes de las
+mismas. Los valores considerados son las macrovariables calculadas por
+el INE a partir de la agregación de los datos de la EAAE ya que no se
+pudo obtener acceso a los microdatos por tratarse de información
+confidencial bajo secreto estadístico.
+
+En particular, se utilizará como variable output el valor bruto de
+producción (VBP) ya que esta variable refleja correctamente el valor
+producido y es menos volátil que el valor agregado bruto (VAB); mientras
+que como inputs se utilizarán las remuneraciones (REM), el consumo de
+capital fijo (CKF) y el consumo intermedio (CI), ya que son los insumos
+clásicos de cualquier función de producción utilizados en la literatura.
+Con estas variables se intenta aproximar al \emph{Producto},
+\emph{Capital}, \emph{Trabajo} y \emph{Consumo intermedio}
+respectivamente.
+
+Como se puede ver en la siguiente tabla, todas las variables se
+encuentran ampliamente correlacionadas:
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-1}Matriz de correlaciones}
+\centering
+\begin{tabular}[t]{lrrrr}
+\toprule
+  & vbp & ci & ckf & rem\\
+\midrule
+\rowcolor{gray!6}  vbp & 1.0000 & 0.9972 & 0.8219 & 0.9597\\
+ci & 0.9972 & 1.0000 & 0.8074 & 0.9597\\
+\rowcolor{gray!6}  ckf & 0.8219 & 0.8074 & 1.0000 & 0.7307\\
+rem & 0.9597 & 0.9597 & 0.7307 & 1.0000\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Las variables se encuentran en valores corrientes. Para una mejor
+aproximación de la función de producción es deseable trabajar a niveles
+constantes, ya que de esta manera se aislan los efectos de los precios y
+se aproxima mejor el valor unitario de los insumos y el producto. Por
+esta razón se decide utilizar un deflactor específico para cada
+variable, como se detalla a continuación:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Producto (Y):} Índice de precios implícitos de la producción,
+  calculado por el BCU.
+\item
+  \textbf{Capital (K):} Índice de precios implícitos de la formación
+  bruta de capital, calculado por el BCU.
+\item
+  \textbf{Trabajo (L):} Índice medio de salarios, calculado por el INE.
+\item
+  \textbf{Consumo intermedio (CI):} Índice de precios implícitos de la
+  producción, calculado por el BCU.
+\end{itemize}
+
+Para simplificar la deflactación se utilizan los índices agregados para
+toda la industria. El deflactar el producto y el consumo intermedio por
+el mismo índice de precios conlleva el supuesto implícito de que la
+evolución de precios del producto y de las materias primas es la misma.
+
+Una vez realizada la deflactación, se cuenta con las variables en
+valores constantes. Como se muestra en el \emph{Gráfico 1}, las
+variables en niveles tienen una alta dispersión, por lo que se aplicará
+la transformación logarítmica para el tratamiento.
+
+\includegraphics{Trabajo_final_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+Como la metodología a emplear es muy sensible a la presencia de
+\emph{outliers}, también se decide quitar a las divisiones de mayor y
+menor VBP. Esta es una práctica habitual en el análisis de la producción
+industrial ya que algunos sectores por su importancia y peso relativo
+distorsionan el análisis, como puede ser el caso de la destilación de
+petróleo o producción de celulosa. También decidimos quitar los sectores
+de menor peso ya que pueden no estar bien representados en la encuesta,
+como es el caso de la industria del software que es una actividad más
+vinculada al área de servicios. Las divisiones quitadas son las
+siguientes:
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-3}Divisiones no incluídas en el análisis}
+\centering
+\begin{tabular}[t]{ll}
+\toprule
+Division & Descripcion\\
+\midrule
+\rowcolor{gray!6}  10 & Elaboración de productos alimenticios.\\
+11 y 12 & Elaboración de bebidas y elaboración de productos de tabaco\\
+\rowcolor{gray!6}  17 & Fabricación de papel y de los productos de papel.\\
+19 & Fabricación de coque y de productos de la refinación del petróleo.\\
+\rowcolor{gray!6}  20 & Fabricación de sustancias y productos químicos.\\
+\addlinespace
+26 & Fabricación de los productos informáticos, electrónicos y ópticos.\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+En el \emph{Gráfico 2} podemos observar como queda la relación entre los
+\emph{inputs} y el \emph{outputs} una vez quitados los \emph{outliers}.
+
+\includegraphics{Trabajo_final_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+En la siguiente tabla se presentan los estadísticos descriptivos de las
+variables, una vez filtrada la base:
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-5}Principales estadísticos descriptivos}
+\centering
+\begin{tabular}[t]{llrrrrrrr}
+\toprule
+variable & n & mean & sd & p0 & p25 & p50 & p75 & p100\\
+\midrule
+\rowcolor{gray!6}  y & 40 & 4.379.680.251 & 2.677.743.842 & 755.971.296 & 2.111.111.098 & 4.514.137.944 & 5.746.680.370 & 10.150.737.464\\
+k & 40 & 143.156.774 & 123.808.621 & 8.966.988 & 42.095.945 & 103.692.555 & 217.861.361 & 650.302.852\\
+\rowcolor{gray!6}  l & 40 & 670.557.122 & 380.360.378 & 108.760.742 & 320.780.923 & 620.062.550 & 872.187.910 & 1.765.668.588\\
+ci & 40 & 2.899.503.385 & 1.949.449.891 & 379.614.733 & 1.294.200.017 & 2.803.487.762 & 4.054.703.115 & 7.351.679.158\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hypertarget{metodologuxeda}{%
+\section{Metodología}\label{metodologuxeda}}
+
+Con el fin de efectuar el estudio se aplicará el Índice de Productividad
+Malmquist (MPI) que examina el crecimiento de la productividad total de
+los factores. Este índice se construye midiendo la distancia radial
+entre los \emph{inputs} y los \emph{outputs} observados en dos períodos,
+en relación con la tecnología de referencia. Es decir, evalúa cada
+observación referente al grupo en dos períodos de tiempo diferentes,
+generando una medida de eficiencia para la unidad bajo análisis.
+
+Cuando la función de distancia es orientada al \emph{input},
+caracterizan una tecnología por la máxima contracción proporcional
+posible en el uso de los insumos, dado un nivel del producto constante.
+Mientras que cuando está orientado al \emph{output} se considera la
+expansión proporcional máxima del vector de producción, dado los insumos
+utilizados. El MPI, a diferencia de los índices tradicionales, realiza
+de forma conjunta las asignaciones entre los dos períodos de los
+\emph{inputs} y los \emph{outputs}.
+
+En este estudio se efectuará el cálculo del MPI utilizando un método
+DEA. Éste permite, a través de la programación lineal, construir una
+frontera no paramétrica que contiene todas las unidades eficientes y sus
+posibles combinaciones. Como resultado, aquellas unidades ineficientes
+quedarán por fuera de esta frontera, midiéndose la eficiencia de cada
+división con respecto a dicha frontera. Cuando la función de distancia
+es orientada al \emph{input}, caracterizan una tecnología por la máxima
+contracción proporcional posible en el uso de los insumos, dado un nivel
+del producto constante. Mientras que cuando está orientado al
+\emph{output} se considera la expansión proporcional máxima del vector
+de producción, dado los insumos utilizados. El MPI, a diferencia de los
+índices tradicionales, realiza de forma conjunta las asignaciones entre
+los dos períodos de los \emph{inputs} y los \emph{outputs}.
+
+En este caso, se utilizará una orientación al \emph{output} ya que para
+medir los cambios en la productividad de la industria buscamos maximizar
+la producción. Cuando el estudio es de orientación al \emph{output}, un
+valor del índice superior a la unidad representa un incremento en la
+productividad en el tiempo. Es decir, cuando el sector tiene una mejora
+en la productividad (entre t y t+1), entonces el resultado arrojado por
+el índice será superior a 1; por el contrario, si el resultado es
+inferior a la unidad se percibe un descenso en la productividad;
+mientras que si el resultado es igual a la unidad es porque no se
+evidenció ningún cambio en el período bajo estudio.
+
+El cambio productivo de una división en particular (y del sector
+industrial en general) entre el período t y t+1 puede determinarse a
+partir de la siguiente fórmula:
+
+FORMULA DEL INDICE
+
+Adicionalmente, el MPI se descompone en cambios de eficiencia técnica
+(TEC), correspondiente al primer componente de la expresión que prosigue
+y cambio tecnológicos (TC), correspondiente al segundo componente.
+
+FORMULA DESCOMPOSICION
+
+Si el cambio de eficiencia es superior a la unidad, entonces hay un
+efecto de catching-up en el tiempo. Si el componente del cambio
+tecnológico es superior a uno, entonces estamos frente a un progreso
+tecnológico en el tiempo. Por su parte, Fare et at.(1994) plantea que a
+su vez, es posible descomponer los cambios de eficiencia en cambios de
+eficiencia de escala (SEC) y en cambios de eficiencia técnica pura
+(PETEC). Por lo tanto, el MPI orientado al output también puede
+expresarse a través de la siguiente ecuación:
+
+FORMULA FINAL
+
+Para obtener el el índice orientado al output es necesario calcular 208
+funciones de distancia \footnote{Esto es porque es necesario calcular
+  cuatro funciones distancia por división, lo que resulta de 16
+  divisiones (K) por año (T=5). Al utilizar la fórmula K*(3T-2) el
+  resultado que arroja es 208.}. Estas funciones representan la
+eficiencia técnica, por lo que permiten comparar los requerimientos
+utilizados por las unidades ineficientes a partir de los productos e
+insumos utilizado por las unidades eficientes.
+
+Este enfoque supone convexidad de datos. Esta metodología además, cuenta
+con dos ventajas principales, en primer lugar no es necesario
+información de precios sino que utiliza datos de unidades físicas
+(cantidades) para los insumos y productos lo que permite comparar las
+diferentes actividades productivas dentro del sector industrial. En
+segundo lugar, no se utiliza el supuesto de maximización de beneficios o
+minimización de costos y el análisis no está atado a una forma funcional
+ni supuestos de especificación. Sin embargo, es muy sensible a outliers
+pudiendo generar ruido en las estimaciones, por dicho motivo es que
+estos no fueron consideraron para el análisis, tal como se mencionó en
+la sección anterior.
+
+Por su parte, de acuerdo a \emph{Caves (1982)} el MPI no asume un tipo
+específico de retornos a escala. No obstante, en los estudios realizados
+por \emph{Griffel - Tatj'e y Lovell (1995)} se prueba que bajo
+rendimientos que no son constantes a escala el MPI falla en identificar
+las mejoras en la productividad a través de la mejora en la eficiencia
+de escala y para algunas firmas. En este estudio utilizaremos retornos
+constantes a escala dado que al regresar el valor bruto de producción
+con el consumo intermedio, capital y trabajo, se desprende que no se
+rechaza la hipótesis nula de retornos constantes a escala.
+
+Para justificar el supuesto de rendimientos constantes a escala
+utilizado se realiza un modelo lineal MCO del \emph{output} sobre los
+\emph{inputs} y se testea la hipótesis nula de que la suma de los
+coeficientes es igual a la unidad.
+
+Primero estimamos el modelo en logaritmos:
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log(y) ~ log(k) + log(l) + log(ci), data = df_filtrado)
+## 
+## Coefficients:
+## (Intercept)       log(k)       log(l)      log(ci)  
+##      1.3285       0.0558       0.2952       0.6355
+\end{verbatim}
+
+Y luego realizamos el contraste de hipótesis:
+
+\begin{verbatim}
+## Linear hypothesis test
+## 
+## Hypothesis:
+## log(k)  + log(l)  + log(ci) = 1
+## 
+## Model 1: restricted model
+## Model 2: log(y) ~ log(k) + log(l) + log(ci)
+## 
+##   Res.Df   RSS Df Sum of Sq    F Pr(>F)
+## 1     77 0.163                         
+## 2     76 0.158  1   0.00507 2.44   0.12
+\end{verbatim}
+
+Como resultado de la prueba de hipótesis no se rechaza la hipótesis nula
+de rendimientos constantes a escala, por lo que trabajaremos con este
+supuesto, ello es habitual en la literatura de productividad industrial.
+
+\hypertarget{resultados}{%
+\section{Resultados}\label{resultados}}
+
+Con la base ya depurada y las variables deflactadas realizamos el
+cálculo del Índice de Malmquist para las 16 divisiones incluídas. Como
+el índice mide la variación de la productividad entre dos períodos se
+indica como valor de índice para un año dado a la variación respecto al
+año anterior.
+
+Comenzamos realizando el cálculo de todas las funciones de distancia
+involucradas. Estas funciones se calculan para cada período tomando como
+base el período anterior. También se calcula el índice punta a punta, es
+decir entre 2012 y 2016. En el siguiente gráfico se muestran la frontera
+de eficiencia para el primer y el último año considerados:
+
+\includegraphics{Trabajo_final_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+Una vez calculadas las funciones de distancia, utilizando el inverso de
+las mismas se obtiene el MPI. En la siguiente tabla se muestra la
+variación del índice para cada año según la división considerada. En la
+última columna se muestra la variación punta a punta. La última fila
+muestra el resultado de toda la industria, es decir agrupando todos los
+valores en valores constantes.
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-9}Evolución del Índice de Malmquist, según año y división}
+\centering
+\begin{tabular}[t]{lrrrr|>{\bfseries}r}
+\toprule
+Division & 2013 & 2014 & 2015 & 2016 & Punta\\
+\midrule
+\rowcolor{gray!6}  13 & 0.9186 & 1.1241 & 1.0439 & 1.0201 & 1.0866\\
+14 & 1.0268 & 1.0417 & 0.9396 & 1.1124 & 1.1349\\
+\rowcolor{gray!6}  15 & 1.0405 & 1.1414 & 0.9793 & 0.9359 & 1.0452\\
+16 & 1.1289 & 1.0560 & 0.9496 & 0.9383 & 1.0286\\
+\rowcolor{gray!6}  18 & 1.0123 & 1.0267 & 1.0087 & 0.9876 & 1.0414\\
+\addlinespace
+21 & 1.0240 & 0.9892 & 1.0284 & 1.0638 & 1.1050\\
+\rowcolor{gray!6}  22 & 1.0102 & 1.0374 & 0.9874 & 0.9854 & 1.0160\\
+23 & 1.0349 & 0.9524 & 0.9769 & 0.9888 & 0.9516\\
+\rowcolor{gray!6}  24 & 1.0230 & 0.9450 & 1.0194 & 0.9722 & 0.9586\\
+25 & 0.9388 & 1.0366 & 1.0059 & 0.9708 & 0.9611\\
+\addlinespace
+\rowcolor{gray!6}  27 & 1.0528 & 0.9952 & 1.0349 & 0.9546 & 1.0626\\
+28 & 0.8875 & 1.1968 & 0.7885 & 1.1266 & 0.9126\\
+\rowcolor{gray!6}  29 y 30 & 1.1159 & 0.9561 & 1.0149 & 0.9158 & 1.0140\\
+31 & 0.8952 & 0.9766 & 0.9490 & 0.9886 & 0.8300\\
+\rowcolor{gray!6}  32 & 1.0541 & 0.9975 & 0.9997 & 1.0021 & 1.0449\\
+\addlinespace
+33 & 1.1000 & 0.9086 & 1.0998 & 1.0523 & 1.1295\\
+\rowcolor{gray!6}  \textbf{Promedio} & \textbf{1.0165} & \textbf{1.0238} & \textbf{0.9891} & \textbf{1.0009} & \textbf{1.0202}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El índice agregado arroja que en promedio hubo una ganancia de 2,02\% en
+productividad, concentrada en los años 2013 y 2014, ya que en los años
+2015 y 2016 se ven caídas en el MPI. Los resultados muestran que 11 de
+las 16 divisiones tuvieron ganancias de productividad en promedio entre
+los años 2012 y 2016. Los sectores con mayores ganancias de
+productividad en el período analizado son: \emph{14 - Fabricación de
+prendas de vestir} y \emph{33 - Reparación e instalación de maquinaria y
+equipo}. Por otro lado los sectores de peor desempeño son: \emph{31 -
+Fabricación de muebles} y \emph{28 - Fabricación de maquinaria y
+equipo}. La siguiente gráfica muestra la evolución del MPI para estas
+divisiones:
+
+\includegraphics{Trabajo_final_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\hypertarget{descomposiciuxf3n-del-uxedndice}{%
+\subsection{Descomposición del
+Índice}\label{descomposiciuxf3n-del-uxedndice}}
+
+Como se indicó en el apartado metodológico el MPI puede ser descompuesto
+en cambios en la eficiencia (TEC) y cambio técnico (TC). Aplicamos esta
+descomposición para la viariación punta a punta y obtenemos el TEC y el
+TC. Adicionalmente se descomponen el cambio en eficiencia en cambio de
+eficiencia de escala (SEC) y cambio técnico puro (PTEC). Se incluye en
+la última fila el promedio simple de todas las divisiones.
+
+En la siguiente tabla se muestran los resultados de la descomposición:
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-11}Descomposición del cambio técnico según división}
+\centering
+\begin{tabular}[t]{lrrrrr}
+\toprule
+Division & TFPC & TC & TEC & PTEC & SEC\\
+\midrule
+\rowcolor{gray!6}  13 & 1.0866 & 1.0866 & 1.0000 & 1.0000 & 1.0000\\
+14 & 1.1349 & 1.0673 & 1.0634 & 1.0710 & 0.9929\\
+\rowcolor{gray!6}  15 & 1.0452 & 1.0670 & 0.9796 & 1.0800 & 0.9070\\
+16 & 1.0286 & 1.0482 & 0.9813 & 0.9826 & 0.9987\\
+\rowcolor{gray!6}  18 & 1.0414 & 1.1052 & 0.9423 & 0.9492 & 0.9927\\
+\addlinespace
+21 & 1.1050 & 1.1050 & 1.0000 & 1.0000 & 1.0000\\
+\rowcolor{gray!6}  22 & 1.0160 & 1.0471 & 0.9703 & 1.0000 & 0.9703\\
+23 & 0.9516 & 1.0518 & 0.9047 & 0.9065 & 0.9980\\
+\rowcolor{gray!6}  24 & 0.9586 & 1.0110 & 0.9482 & 0.9548 & 0.9930\\
+25 & 0.9611 & 1.0854 & 0.8855 & 0.9226 & 0.9597\\
+\addlinespace
+\rowcolor{gray!6}  27 & 1.0626 & 1.0765 & 0.9871 & 0.9765 & 1.0109\\
+28 & 0.9126 & 0.9126 & 1.0000 & 1.0000 & 1.0000\\
+\rowcolor{gray!6}  29 y 30 & 1.0140 & 1.0968 & 0.9245 & 0.9292 & 0.9949\\
+31 & 0.8300 & 0.9202 & 0.9019 & 0.9195 & 0.9809\\
+\rowcolor{gray!6}  32 & 1.0449 & 1.0627 & 0.9833 & 1.0000 & 0.9833\\
+\addlinespace
+33 & 1.1295 & 1.1025 & 1.0245 & 1.0000 & 1.0245\\
+\rowcolor{gray!6}  \textbf{Promedio} & \textbf{1.0202} & \textbf{1.0529} & \textbf{0.9685} & \textbf{0.9808} & \textbf{0.9879}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+La descomposición nos permite observar que la ganancia de productividad
+promedio de 2,02\% se puede descomponer en un una ganancia de 5,29\%
+cambio técnico y una pérdida de 3,15\% de cambio en la eficiencia
+técnica. Es decir que los aumentos de productividad vienen dados por
+mejoras promedio en la tecnología de producción y no en la eficiencia.
+
+Cuando analizamos las divisiones de mejor desempeño vemos que la
+ganancia en productividad se explica por ganancias de similar magnitud
+en TEC y TC para la división \emph{14 - Fabricación de prendas de
+vestir}. En el caso de \emph{33 - Reparación e instalación de maquinaria
+y equipo} vemos que el aumento de la TFPC viene de la mano de un fuerte
+aumento en el cambio técnico.
+
+\hypertarget{conclusiones}{%
+\section{Conclusiones}\label{conclusiones}}
+
+En este trabajo pudimos obtener mediciones de la productividad total de
+los factores para el sector industrial para el período 2012-2016.
+Encontramos que existieron ganancias de productividad en promedio para
+todos los años salvo el 2015, pero con un desempeño sectorial
+hetogéneno, habiendo sectores ganancias netas de productividad así como
+otros con pérdidas.
+
+La adopción metodológica del índice de Malmquist representa una
+innovación en la literatura existente ya que solamente se había
+utilizado métodos paramétricos para la estimación de la productividad
+industrial en Uruguay. Los resultados arrojan una tasa de crecimiento de
+la productividad promedio de 2,02\% para el período estudiado, lo cual
+es un resultado dentro del margen de lo esperado.
+
+A su vez la aplicación del MPI permitió descomponer el crecimiento de la
+productividad en cambio tecnológico y ganancias en la eficiencia,
+obteniendo que las ganancias de productividad son resultado de cambio
+técnico.
+
+\hypertarget{referencias-nibliogruxe1ficas}{%
+\section{Referencias
+nibliográficas}\label{referencias-nibliogruxe1ficas}}
+
+\begin{itemize}
+\item
+  {[}1{]} Casacuberta, C.; Gandelman N. (2015) ``Productivity, exit and
+  crisis in Uruguayan manufacturing and services sectors''. Developing
+  Economies, Vol. 53(1), pp 27-43.
+\item
+  {[}2{]} Carracelas, G.; Casacuberta C. y Vaillant, M. (2009)
+  ``Productividad total de factores: desempeño sectorial heterogéneo''.
+  Facultad de Ciencias Sociales, UdelaR.
+\item
+  {[}3{]} Eslava, M.; Hurtado, B.; Salas, N., et al.~(2018) ``Microdatos
+  para el estudio de la productividad en América Latina''. Banco de
+  Desarrollo para América Latina (CAF).
+\item
+  {[}4{]} Lara, M. (2011) ``Desempeño de productividad sectoriales de la
+  industria manufacturera uruguaya (1970-2000) en una perspectiva
+  comparada''. Facultad de Ciencias Sociales, UdelaR.
+\item
+  {[}5{]} Martínez-Damián, M.; Brambila-Paz, J. y García-Mata, R. (2013)
+  ``Índice de malmquist y productividad estatal en México''.
+  Agricultura, sociedad y desarrollo, 10(3), 359-369.
+\item
+  {[}6{]} Presto, G. (2016) ``Efectos de la productividad y rentabilidad
+  en el desempeño y supervivencia de las empresas manufactureras
+  uruguayas''. Facultad de Ciencias Sociales, UdelaR.
+\end{itemize}
+
+\hypertarget{anexo}{%
+\section{Anexo}\label{anexo}}
+
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-12}Divisiones incluídas en el análisis}
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{ll}
+\toprule
+Division & Descripcion\\
+\midrule
+\rowcolor{gray!6}  10 & Elaboración de productos alimenticios.\\
+11 y 12 & Elaboración de bebidas y elaboración de productos de tabaco\\
+\rowcolor{gray!6}  13 & Fabricación de productos textiles.\\
+14 & Fabricación de prendas de vestir.\\
+\rowcolor{gray!6}  15 & Fabricación de cueros y productos conexos.\\
+\addlinespace
+16 & Producción de madera y fabricación de productos de madera y corcho, excepto muebles\\
+\rowcolor{gray!6}  17 & Fabricación de papel y de los productos de papel.\\
+18 & Actividades de impresión y reproducción de grabaciones.\\
+\rowcolor{gray!6}  19 & Fabricación de coque y de productos de la refinación del petróleo.\\
+20 & Fabricación de sustancias y productos químicos.\\
+\addlinespace
+\rowcolor{gray!6}  21 & Fabricación de productos farmacéuticos, sustancias químicas medicinales y de produc\\
+22 & Fabricación de productos de caucho y plástico.\\
+\rowcolor{gray!6}  23 & Fabricación de otros productos minerales no metálicos.\\
+24 & Fabricación de metales comunes.\\
+\rowcolor{gray!6}  25 & Fabricación de productos derivados del metal, excepto maquinaria y equipo.\\
+\addlinespace
+26 & Fabricación de los productos informáticos, electrónicos y ópticos.\\
+\rowcolor{gray!6}  27 & Fabricación de equipo eléctrico.\\
+28 & Fabricación de maquinaria y equipo n.c.p.\\
+\rowcolor{gray!6}  29 y 30 & Fabricación de vehículos automotores, remolques y semirremolques. Fabricación de ot\\
+31 & Fabricación de muebles.\\
+\addlinespace
+\rowcolor{gray!6}  32 & Otras industrias manufactureras.\\
+33 & Reparación e instalación de la maquinaria y equipo.\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\end{document}
